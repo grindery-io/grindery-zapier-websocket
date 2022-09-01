@@ -67,4 +67,17 @@ app.delete("/webhooks/:webhook_id", async (req, res) => {
   });
 });
 
+app.post("/triggerZap", async (req, res) => {
+  const token = req.body.token;
+  const payload = req.body.payload;
+  client.connect(async (err) => {
+    const collection = client.db("grindery_zapier").collection("webhooks");
+    // perform actions on the collection object
+    const search_result = await collection.findOne({ token: token });
+    client.close();
+    //res.status(200).send({ data: "ok" });
+    res.status(200).json({ url: search_result.webhook_url });
+  });
+});
+
 module.exports = app;
