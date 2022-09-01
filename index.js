@@ -75,12 +75,12 @@ app.post("/triggerZap", async (req, res) => {
     // perform actions on the collection object
     const search_result = await collection.findOne({ token: token });
     //res.status(200).send({ data: "ok" });
-    if (search_result) {
+    /*if (search_result) {
       const forward_to_zap = await fetch(search_result.webhook_url, {
         method: "post",
         body: JSON.stringify(payload),
       });
-      const zap_response = await forward_to_zap.json();
+      //const zap_response = await forward_to_zap.json();
       if (zap_response.ok) {
         res.status(200).json({ message: "Sent to zap" });
       } else {
@@ -88,7 +88,8 @@ app.post("/triggerZap", async (req, res) => {
       }
     } else {
       res.status(200).json({ err: "Zap not found" });
-    }
+    }*/
+    res.status(200).json({ message: search_result.url });
     client.close();
   });
 });
