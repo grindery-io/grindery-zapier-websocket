@@ -74,7 +74,6 @@ app.post("/triggerZap", async (req, res) => {
     const collection = client.db("grindery_zapier").collection("webhooks");
     // perform actions on the collection object
     const search_result = await collection.findOne({ token: token });
-    client.close();
     //res.status(200).send({ data: "ok" });
     if (search_result) {
       const forward_to_zap = await fetch(search_result.webhook_url, {
@@ -90,6 +89,7 @@ app.post("/triggerZap", async (req, res) => {
     } else {
       res.status(200).json({ err: "Zap not found" });
     }
+    client.close();
   });
 });
 
