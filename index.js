@@ -76,7 +76,20 @@ app.post("/triggerZap", async (req, res) => {
     const search_result = await collection.findOne({ token: token });
     client.close();
     //res.status(200).send({ data: "ok" });
-    res.status(200).json({ url: search_result.webhook_url });
+    if (search_result) {
+      const forward_to_zap = await fetch(search_result.webhook_url, {
+        method: "post",
+        body: JSON.stringify(payload),
+      });
+      const zap_response = await forward_to_zap.json();
+      if (zap_response.ok) {
+        res.status(200).json({ message: "Sent to zap" });
+      } else {
+        res.status(200).json({ err: "Err communicating with Zap" });
+      }
+    } else {
+      res.status(200).json({ err: "Zap not found" });
+    }
   });
 });
 
