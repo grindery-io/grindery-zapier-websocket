@@ -28,6 +28,7 @@ app.listen(process.env.PORT || port, () => {
 });
 
 app.post("/webhooks", async (req, res) => {
+  console.log("client: ", client);
   client.connect(async (err) => {
     const collection = client.db("grindery_zapier").collection("webhooks");
     // perform actions on the collection object
