@@ -87,7 +87,7 @@ app.post("/triggerZap", async (req, res) => {
     } else {
       res.status(200).json({ err: "Zap not found" });
     }
-    res.status(200).json({ message: search_result.webhook_url });
+    //res.status(200).json({ message: search_result.webhook_url });
     client.close();
   });
 });
