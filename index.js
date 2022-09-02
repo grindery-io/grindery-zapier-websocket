@@ -78,10 +78,9 @@ app.post("/triggerZap", async (req, res) => {
     const search_result = await collection.findOne({ token: token });
     //res.status(200).send({ data: "ok" });
     if (search_result) {
-      const forward_to_zap = await axios.post(
-        search_result.webhook_url,
-        payload
-      );
+      const forward_to_zap = await axios.post(search_result.webhook_url, {
+        payload,
+      });
 
       res.status(200).json({ message: forward_to_zap.status });
     } else {
