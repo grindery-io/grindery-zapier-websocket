@@ -82,8 +82,8 @@ app.post("/triggerZap", async (req, res) => {
         search_result.webhook_url,
         payload
       );
-      const zap_response = await forward_to_zap.json();
-      res.status(200).json({ message: zap_response.status });
+
+      res.status(200).json({ message: forward_to_zap.status });
     } else {
       res.status(200).json({ err: "Zap not found" });
     }
