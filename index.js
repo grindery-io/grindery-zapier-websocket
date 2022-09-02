@@ -83,7 +83,7 @@ app.post("/triggerZap", async (req, res) => {
         payload
       );
       const zap_response = await forward_to_zap.json();
-      res.status(200).json({ message: zap_response });
+      res.status(200).json({ message: zap_response.status });
     } else {
       res.status(200).json({ err: "Zap not found" });
     }
