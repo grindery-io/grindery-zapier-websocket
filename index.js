@@ -4,6 +4,8 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const { fromString } = require("uuidv4");
 const { v5 } = require("uuid");
 const port = 3000;
+const axios = require("axios");
+
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -75,20 +77,16 @@ app.post("/triggerZap", async (req, res) => {
     // perform actions on the collection object
     const search_result = await collection.findOne({ token: token });
     //res.status(200).send({ data: "ok" });
-    /*if (search_result) {
-      const forward_to_zap = await fetch(search_result.webhook_url, {
-        method: "post",
-        body: JSON.stringify(payload),
-      });
-      //const zap_response = await forward_to_zap.json();
-      if (zap_response.ok) {
-        res.status(200).json({ message: "Sent to zap" });
-      } else {
-        res.status(200).json({ err: "Err communicating with Zap" });
-      }
+    if (search_result) {
+      const forward_to_zap = await axios.post(
+        search_result.webhook_url,
+        payload
+      );
+      const zap_response = await forward_to_zap.json();
+      res.status(200).json({ message: zap_response });
     } else {
       res.status(200).json({ err: "Zap not found" });
-    }*/
+    }
     res.status(200).json({ message: search_result.webhook_url });
     client.close();
   });
