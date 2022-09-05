@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const server = require("http").createServer(app);
+const WebSocket = require("ws");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const { fromString } = require("uuidv4");
 const { v5 } = require("uuid");
@@ -12,6 +14,17 @@ app.use(
     extended: true,
   })
 );
+
+const wss = new WebSocket.Server({ server: server });
+
+wss.on("connection", function connection(ws) {
+  console.log("a new client connected");
+  ws.on("message", function message(data) {
+    console.log("received: %s", data);
+  });
+
+  ws.send("Hi Client");
+});
 
 const uri =
   "mongodb+srv://connex_testing:MkLvwusz9i2K7mOT@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority";
