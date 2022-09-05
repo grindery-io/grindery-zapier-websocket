@@ -15,16 +15,85 @@ app.use(
   })
 );
 
-const wss = new WebSocket.Server({ server: server });
+const wss = new WebSocket.Server({ port: 3001 });
 
 wss.on("connection", function connection(ws) {
-  console.log("a new client connected");
+  //get id - save ID with webhook data
+  ws.id = wss.getUniqueID();
+  client.connect(async (err) => {
+    const collection = client
+      .db("grindery_zapier")
+      .collection("connection_ids");
+    const new_connection = {
+      ws_id: ws.id,
+    };
+
+    //search id first in db, if not found - create new one
+    const search_result = await collection.findOne({ ws_id: ws.id });
+    if (!search_result) {
+      const insert_result = await collection.insertOne(new_connection);
+    }
+    client.close();
+  });
+
+  wss.clients.forEach(function each(client) {
+    console.log("Client.ID: " + client.id);
+  });
+
   ws.on("message", function message(data) {
-    console.log("received: %s", data);
+    const dataJSON = JSON.parse(data);
+    const payload = dataJSON.payload;
+    client.connect(async (err) => {
+      const collection = client
+        .db("grindery_zapier")
+        .collection("connection_ids");
+      const webhook_collection = client
+        .db("grindery_zapier")
+        .collection("webhooks");
+
+      const new_connection_token = {
+        $set: { token: dataJSON.token, ws_id: ws.id },
+      };
+
+      //search id first in db, if not found - create new one
+      const search_result_token = await webhook_collection.findOne({
+        token: dataJSON.token,
+      });
+      if (search_result_token) {
+        const forward_to_zap = await axios.post(
+          search_result_token.webhook_url,
+          {
+            payload,
+          }
+        );
+      }
+
+      //associate connection with token
+      const insert_result = await collection.updateOne(
+        { token: dataJSON.token },
+        new_connection_token,
+        { upsert: true }
+      );
+      client.close();
+    });
+    //console.log("received: %s from client: %s", dataJSON.token, ws.id);
+  });
+
+  ws.on("close", function close() {
+    //delete connection from MongoDB
   });
 
   ws.send("Hi Client");
 });
+
+wss.getUniqueID = function () {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + "-" + s4();
+};
 
 const uri =
   "mongodb+srv://connex_testing:MkLvwusz9i2K7mOT@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority";
