@@ -1,12 +1,13 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const WebSocket = require("ws");
+const { WebSocket, Server } = require("ws");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const { fromString } = require("uuidv4");
 const { v5 } = require("uuid");
 const port = 3000;
 const axios = require("axios");
+var expressWs = require("express-ws")(app);
 
 app.use(express.json());
 app.use(
@@ -15,9 +16,16 @@ app.use(
   })
 );
 
-const wss = new WebSocket.Server({ port: 3001 });
+app.ws("/", function (ws, req) {
+  ws.on("message", function (msg) {
+    console.log("express ws: ", msg);
+  });
+  console.log("Hi Client: ", req);
+});
 
-wss.on("connection", function connection(ws) {
+//const wss = new WebSocket.Server({ port: port });
+
+/*wss.on("connection", function connection(ws) {
   //get id - save ID with webhook data
   ws.id = wss.getUniqueID();
   client.connect(async (err) => {
@@ -93,7 +101,7 @@ wss.getUniqueID = function () {
       .substring(1);
   }
   return s4() + s4() + "-" + s4();
-};
+};*/
 
 const uri =
   "mongodb+srv://connex_testing:MkLvwusz9i2K7mOT@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority";
