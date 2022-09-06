@@ -38,6 +38,20 @@ app.ws("/", function (ws, req) {
   ws.on("message", function (msg) {
     console.log("express ws: ", msg);
   });
+
+  ws.on("close", function (msg) {
+    client.connect(async (err) => {
+      //client.db("grindery_zapier").collection("webbooks");
+      const collection = client
+        .db("grindery_zapier")
+        .collection("connection_ids");
+      const delete_connection_id = await collection.deleteOne({
+        ws_id: ws.id,
+      });
+      console.log(`A document was deleted with the ws_id: ${ws.id}`);
+      client.close();
+    });
+  });
   //console.log("Hi Client: ", req);
 });
 
@@ -175,7 +189,7 @@ app.delete("/webhooks/:webhook_id", async (req, res) => {
   const { webhook_id } = req.params;
 
   client.connect(async (err) => {
-    client.db("grindery_zapier").collection("webbooks");
+    //client.db("grindery_zapier").collection("webbooks");
     const collection = client.db("grindery_zapier").collection("webhooks");
     const insert_result = await collection.deleteOne({
       _id: new ObjectId(webhook_id),
