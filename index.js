@@ -17,7 +17,7 @@ app.use(
 );
 
 app.ws("/", function (ws, req) {
-  ws.on("connection", function (stream) {
+  ws.on("open", function (stream) {
     console.log("Connection made: ", stream);
   });
 
