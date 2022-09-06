@@ -17,9 +17,7 @@ app.use(
 );
 
 app.ws("/", function (ws, req) {
-  ws.on("open", function (stream) {
-    console.log("Connection made: ", stream);
-  });
+  console.log("connected", req.query);
 
   ws.on("message", function (msg) {
     console.log("express ws: ", msg);
