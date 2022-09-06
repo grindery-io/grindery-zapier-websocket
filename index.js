@@ -36,7 +36,43 @@ app.ws("/", function (ws, req) {
   });
 
   ws.on("message", function (msg) {
-    console.log("express ws: ", msg);
+    const dataJSON = JSON.parse(data); //data from connection
+    const payload = dataJSON.payload; //payload node
+    client.connect(async (err) => {
+      const collection = client
+        .db("grindery_zapier")
+        .collection("connection_ids");
+
+      const webhook_collection = client
+        .db("grindery_zapier")
+        .collection("webhooks");
+
+      //search id first in db, if not found - create new one
+      const search_result_token = await webhook_collection.findOne({
+        token: dataJSON.token,
+      });
+
+      if (search_result_token) {
+        const forward_to_zap = await axios.post(
+          search_result_token.webhook_url,
+          {
+            payload,
+          }
+        );
+      }
+
+      const new_connection_token = {
+        $set: { token: dataJSON.token, ws_id: ws.id },
+      };
+
+      //associate connection with token
+      const insert_result = await collection.updateOne(
+        { token: dataJSON.token },
+        new_connection_token,
+        { upsert: true }
+      );
+      client.close();
+    });
   });
 
   ws.on("close", function (msg) {
