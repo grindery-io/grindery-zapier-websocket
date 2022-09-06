@@ -36,7 +36,7 @@ app.ws("/", function (ws, req) {
   });
 
   ws.on("message", function (msg) {
-    const dataJSON = JSON.parse(data); //data from connection
+    const dataJSON = JSON.parse(msg); //data from connection
     const payload = dataJSON.payload; //payload node
     client.connect(async (err) => {
       const collection = client
