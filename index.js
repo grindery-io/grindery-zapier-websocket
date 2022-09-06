@@ -18,6 +18,22 @@ app.use(
 
 app.ws("/", function (ws, req) {
   console.log("connected", req.query);
+  ws.id = uniqueID();
+  client.connect(async (err) => {
+    const collection = client
+      .db("grindery_zapier")
+      .collection("connection_ids");
+    const new_connection = {
+      ws_id: ws.id,
+    };
+
+    //search id first in db, if not found - create new one
+    const search_result = await collection.findOne({ ws_id: ws.id });
+    if (!search_result) {
+      const insert_result = await collection.insertOne(new_connection);
+    }
+    client.close();
+  });
 
   ws.on("message", function (msg) {
     console.log("express ws: ", msg);
