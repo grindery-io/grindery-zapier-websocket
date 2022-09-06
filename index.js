@@ -24,7 +24,7 @@ app.ws("/", function (ws, req) {
   ws.on("message", function (msg) {
     console.log("express ws: ", msg);
   });
-  console.log("Hi Client: ", req);
+  //console.log("Hi Client: ", req);
 });
 
 //const wss = new WebSocket.Server({ port: port });
