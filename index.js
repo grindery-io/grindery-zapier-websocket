@@ -17,6 +17,10 @@ app.use(
 );
 
 app.ws("/", function (ws, req) {
+  ws.on("connection", function (stream) {
+    console.log("Connection made: ", stream);
+  });
+
   ws.on("message", function (msg) {
     console.log("express ws: ", msg);
   });
@@ -102,6 +106,15 @@ wss.getUniqueID = function () {
   }
   return s4() + s4() + "-" + s4();
 };*/
+
+function uniqueID() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + "-" + s4();
+}
 
 const uri =
   "mongodb+srv://connex_testing:MkLvwusz9i2K7mOT@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority";
