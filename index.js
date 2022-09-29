@@ -50,7 +50,7 @@ app.ws("/", function (ws, req) {
 
       //search id first in db, if not found - create new one
       const search_result_token = await webhook_collection.findOne({
-        token: dataJSON.token,
+        token: dataJSON.params.fields.token,
       });
 
       if (search_result_token) {
@@ -63,7 +63,7 @@ app.ws("/", function (ws, req) {
       }
 
       const new_connection_token = {
-        $set: { token: dataJSON.token, ws_id: ws.id },
+        $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
       };
 
       //associate connection with token
