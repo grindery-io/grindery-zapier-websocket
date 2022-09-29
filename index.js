@@ -87,7 +87,9 @@ app.ws("/", function (ws, req) {
       const delete_connection_id = await collection.deleteOne({
         ws_id: ws.id,
       });
-      console.log(`A document was deleted with the ws_id: ${ws.id}`);
+      console.log(
+        `A document was deleted from connections collection with the ws_id: ${ws.id}`
+      );
       client.close();
     });
   });
