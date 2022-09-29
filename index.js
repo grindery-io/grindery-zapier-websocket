@@ -58,10 +58,21 @@ app.ws("/", function (ws, req) {
 
       //search id first in db, if not found - create new one
       var search_result_token = {};
-      if (dataJSON.params.fields.token) {
+      if (typeof dataJSON.params.fields.token != undefined) {
         search_result_token = await webhook_collection.findOne({
           token: dataJSON.params.fields.token,
         });
+
+        const new_connection_token = {
+          $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
+        };
+
+        //associate connection with token
+        const insert_result = await collection.updateOne(
+          { token: dataJSON.token },
+          new_connection_token,
+          { upsert: true }
+        );
       }
 
       if (search_result_token) {
@@ -74,16 +85,6 @@ app.ws("/", function (ws, req) {
         //console.log("Response from Zapier: ", forward_to_zap);
       }
 
-      const new_connection_token = {
-        $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
-      };
-
-      //associate connection with token
-      const insert_result = await collection.updateOne(
-        { token: dataJSON.token },
-        new_connection_token,
-        { upsert: true }
-      );
       ws.send(msg);
       //client.close(); //closed
     });
