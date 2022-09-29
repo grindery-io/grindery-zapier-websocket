@@ -88,6 +88,7 @@ app.ws("/", function (ws, req) {
       //ws.send(msg);
       client.close(); //closed
     });
+    return;
   });
 
   ws.on("close", function (msg) {
