@@ -73,7 +73,7 @@ app.ws("/", function (ws, req) {
         new_connection_token,
         { upsert: true }
       );
-      ws.send({ result: 200 });
+      ws.send(msg);
       client.close(); //close
     });
   });
