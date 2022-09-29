@@ -57,9 +57,12 @@ app.ws("/", function (ws, req) {
         .collection("webhooks");
 
       //search id first in db, if not found - create new one
-      const search_result_token = await webhook_collection.findOne({
-        token: dataJSON.params.fields.token,
-      });
+      var search_result_token = {};
+      if (dataJSON.params.fields.token) {
+        search_result_token = await webhook_collection.findOne({
+          token: dataJSON.params.fields.token,
+        });
+      }
 
       if (search_result_token) {
         const forward_to_zap = await axios.post(
@@ -68,7 +71,7 @@ app.ws("/", function (ws, req) {
             payload,
           }
         );
-        console.log("Response from Zapier: ", forward_to_zap);
+        //console.log("Response from Zapier: ", forward_to_zap);
       }
 
       const new_connection_token = {
