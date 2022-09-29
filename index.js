@@ -84,9 +84,9 @@ app.ws("/", function (ws, req) {
         );
         //console.log("Response from Zapier: ", forward_to_zap);
       }
-      return;
+      //return;
       //ws.send(msg);
-      //client.close(); //closed
+      client.close(); //closed
     });
   });
 
