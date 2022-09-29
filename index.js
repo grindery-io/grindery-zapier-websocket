@@ -60,7 +60,7 @@ app.ws("/", function (ws, req) {
             payload,
           }
         );
-        console.log("Response from Zapier: ", JSON.stringify(forward_to_zap));
+        console.log("Response from Zapier: ", forward_to_zap);
       }
 
       const new_connection_token = {
