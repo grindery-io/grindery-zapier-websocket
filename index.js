@@ -38,7 +38,7 @@ app.ws("/", function (ws, req) {
   ws.on("message", function (msg) {
     const dataJSON = JSON.parse(msg); //data from connection
     console.log("Message from Grindery: ", dataJSON);
-    const payload = dataJSON.payload; //payload node
+    const payload = { id: "test" }; //payload node
     client.connect(async (err) => {
       const collection = client
         .db("grindery_zapier")
@@ -60,6 +60,7 @@ app.ws("/", function (ws, req) {
             payload,
           }
         );
+        console.log("Response from Zapier: ", JSON.stringify(forward_to_zap));
       }
 
       const new_connection_token = {
