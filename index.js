@@ -102,7 +102,7 @@ app.ws("/", function (ws, req) {
       console.log(
         `A document was deleted from connections collection with the ws_id: ${ws.id}`
       );
-      //client.close();
+      client.close();
     });
   });
   //console.log("Hi Client: ", req);
