@@ -82,7 +82,7 @@ app.ws("/", function (ws, req) {
         { upsert: true }
       );
       ws.send(msg);
-      //client.close(); //close
+      //client.close(); //closed
     });
   });
 
