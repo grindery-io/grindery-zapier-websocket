@@ -9,6 +9,14 @@ const port = 3000;
 const axios = require("axios");
 var expressWs = require("express-ws")(app);
 
+const uri =
+  "mongodb+srv://connex_testing:MkLvwusz9i2K7mOT@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
+
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -74,7 +82,7 @@ app.ws("/", function (ws, req) {
         { upsert: true }
       );
       ws.send(msg);
-      client.close(); //close
+      //client.close(); //close
     });
   });
 
@@ -184,14 +192,6 @@ function uniqueID() {
   }
   return s4() + s4() + "-" + s4();
 }
-
-const uri =
-  "mongodb+srv://connex_testing:MkLvwusz9i2K7mOT@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
