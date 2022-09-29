@@ -40,7 +40,7 @@ app.ws("/", function (ws, req) {
     if (!search_result) {
       const insert_result = await collection.insertOne(new_connection);
     }
-    client.close();
+    //client.close();
   });
 
   ws.on("message", function (msg) {
