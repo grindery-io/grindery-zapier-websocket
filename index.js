@@ -37,6 +37,7 @@ app.ws("/", function (ws, req) {
 
   ws.on("message", function (msg) {
     const dataJSON = JSON.parse(msg); //data from connection
+    console.log("Message from Grindery: ", dataJSON);
     const payload = dataJSON.payload; //payload node
     client.connect(async (err) => {
       const collection = client
