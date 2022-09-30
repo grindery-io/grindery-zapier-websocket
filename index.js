@@ -91,7 +91,7 @@ app.ws("/", function (ws, req) {
       }
       //return;
       //ws.send(msg);
-      //client.close(); //closed
+      client.close(); //closed
     });
   });
 
