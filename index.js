@@ -84,7 +84,7 @@ app.ws("/", function (ws, req) {
         );
         //test if response is success
         //demo test
-        const response_success = { jsonrpc: "2.0", result: "success", id: 1 };
+        const response_success = { jsonrpc: "2.0", result: true, id: 1 };
         ws.send(JSON.stringify(response_success));
         //return response_success;
         //console.log("Response from Zapier: ", forward_to_zap);
