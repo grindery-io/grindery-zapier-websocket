@@ -58,7 +58,7 @@ app.ws("/", function (ws, req) {
 
       //search id first in db, if not found - create new one
       var search_result_token = {};
-      if (typeof dataJSON.params.fields.token != undefined) {
+      if (typeof dataJSON.params.fields.token !== undefined) {
         search_result_token = await webhook_collection.findOne({
           token: dataJSON.params.fields.token,
         });
@@ -82,6 +82,10 @@ app.ws("/", function (ws, req) {
             payload,
           }
         );
+        //test if response is success
+        //demo test
+        const response_success = { jsonrpc: "2.0", result: {}, id: 1 };
+        return response_success;
         //console.log("Response from Zapier: ", forward_to_zap);
       }
       //return;
