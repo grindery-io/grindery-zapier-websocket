@@ -84,7 +84,12 @@ app.ws("/", function (ws, req) {
         );
         //test if response is success
         //demo test
-        const response_success = { jsonrpc: "2.0", error: null, id: 1 };
+        const response_success = {
+          jsonrpc: "2.0",
+          error: null,
+          result: {},
+          id: 1,
+        };
         //ws.send('{"jsonrpc": \'2.0\',"result":"success", "id":1}'); //succeeds, not moving forward
         ws.send('{"jsonrpc": "2.0", "result": {}, "id": 1}');
       }
