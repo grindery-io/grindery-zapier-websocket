@@ -86,7 +86,7 @@ app.ws("/", function (ws, req) {
         //demo test
         const response_success = { jsonrpc: "2.0", result: true, id: 1 };
         ws.send('{"jsonrpc": \'2.0\',"result":"success", "id":1}'); //succeeds, not moving forward
-        ws.send('{"jsonrpc": "2.0", "result": {}, "id": 1}');
+        ws.send('{"jsonrpc": \'2.0\', "result": {}, "id": 1}');
       }
       //return;
       //ws.send(msg);
