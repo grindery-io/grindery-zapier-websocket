@@ -94,7 +94,7 @@ app.ws("/", function (ws, req) {
         /*ws.send(
           '{"jsonrpc": \'2.0\',"result":"success", "error": null,changes "id":1}'
         ); //succeeds, not moving forward*/
-        ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}'); //succeeds, not moving forward
+        ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}'); //succeeds, not moving forward, dry run
         //ws.send('{"jsonrpc": "2.0", "error": null, "result": {},"id": 1}');
       }
       //return;
