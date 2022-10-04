@@ -61,6 +61,8 @@ app.ws("/", function (ws, req) {
       if (typeof dataJSON.params.fields.token !== undefined) {
         if (dataJSON.method === "callWebhook") {
           //Trigger a workflow from Zapier
+          console.log("Call Webhook on session: ", dataJSON.params.sessionId);
+          console.log(JSON.stringify(dataJSON.params.fields.payload));
           ws.send(JSON.stringify(dataJSON.params.fields.payload));
         }
 
@@ -69,6 +71,7 @@ app.ws("/", function (ws, req) {
 
         if (dataJSON.method === "runAction") {
           //Trigger a zap from Grindery
+          console.log("Run Action from ", dataJSON.params.sessionId);
           search_result_token = await webhook_collection.findOne({
             token: dataJSON.params.fields.token,
           });
