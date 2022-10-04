@@ -117,21 +117,13 @@ app.ws("/", function (ws, req) {
             );
 
             //test if response is success
-            //demo test
             const response_success = {
               jsonrpc: "2.0",
               result: {},
               id: 1,
             };
 
-            //ws.send(JSON.stringify(response_success)); //succeeds, not moving forward
-            ws.send(
-              JSON.stringify({
-                jsonrpc: "2.0",
-                result: {},
-                id: 1,
-              })
-            );
+            ws.send(response_success);
           }
         }
       }
