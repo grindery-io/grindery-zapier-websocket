@@ -123,7 +123,7 @@ app.ws("/", function (ws, req) {
               id: 1,
             };
 
-            ws.send(response_success);
+            ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
           }
         }
       }
