@@ -118,16 +118,11 @@ app.ws("/", function (ws, req) {
             //demo test
             const response_success = {
               jsonrpc: "2.0",
-              error: null,
               result: {},
               id: 1,
             };
-            //ws.send(JSON.stringify(response_success));
-            /*ws.send(
-              '{"jsonrpc": \'2.0\',"result":"success", "error": null,changes "id":1}'
-            ); //succeeds, not moving forward*/
-            ws.send('{"jsonrpc": "2.0","result":{}, "id":1}'); //succeeds, not moving forward
-            //ws.send('{"jsonrpc": "2.0", "error": null, "result": {},"id": 1}');
+
+            ws.send(JSON.stringify(response_success)); //succeeds, not moving forward
           }
         }
       }
