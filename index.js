@@ -63,7 +63,7 @@ app.ws("/", function (ws, req) {
           //Trigger a workflow from Zapier
           console.log("Call Webhook on session: ", dataJSON.params.sessionId);
           console.log(JSON.stringify(dataJSON.params.fields.payload));
-          ws.send(JSON.stringify(dataJSON.params.fields.payload));
+          ws.send(dataJSON.params.fields.payload);
         }
 
         if (dataJSON.method === "setupSignal") {
