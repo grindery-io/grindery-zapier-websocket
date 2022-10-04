@@ -177,7 +177,7 @@ app.post("/webhooks", async (req, res) => {
     // perform actions on the collection object
     //console.log(req.body);
     const hook_url = req.body.url;
-    const hook_token = fromString(hook_url);
+    const hook_token = req.body.token;
     const new_webhook = {
       timestamp: Date.now(),
       token: hook_token,
