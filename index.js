@@ -85,7 +85,7 @@ app.ws("/", function (ws, req) {
             new_connection_token,
             { upsert: true }
           );
-          //ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}');
+          ws.send('{"data": 1}');
         }
 
         if (dataJSON.method === "runAction") {
