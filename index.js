@@ -64,9 +64,12 @@ app.ws("/", function (ws, req) {
             "Call Webhook on session id: ",
             dataJSON.params.sessionId
           );
-          console.log(JSON.stringify(dataJSON.params.fields.payload.payload));
-          //ws.send(JSON.stringify(dataJSON.params.fields.payload));
-          ws.send('{"jsonrpc": "2.0","result":{}, "id":1}');
+          console.log(
+            "Data Sent through webhook: ",
+            JSON.stringify(dataJSON.params.fields.payload.payload)
+          );
+          ws.send(JSON.stringify(dataJSON.params.fields.payload));
+          //ws.send('{"jsonrpc": "2.0","result":{}, "id":1}');
         }
 
         if (dataJSON.method === "setupSignal") {
