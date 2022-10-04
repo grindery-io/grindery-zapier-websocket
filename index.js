@@ -85,7 +85,7 @@ app.ws("/", function (ws, req) {
             new_connection_token,
             { upsert: true }
           );
-          //ws.send("{data: true}");
+          ws.send("{data: true}");
         }
 
         if (dataJSON.method === "runAction") {
