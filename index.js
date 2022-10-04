@@ -69,8 +69,8 @@ app.ws("/", function (ws, req) {
             dataJSON.params.sessionId
           );
           console.log(JSON.stringify(dataJSON.params.fields.payload.payload));
-          ws.send(JSON.stringify(dataJSON.params.fields.payload.payload));
-          //ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}');
+          //ws.send(JSON.stringify(dataJSON.params.fields.payload.payload));
+          ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}');
         }
 
         if (dataJSON.method === "setupSignal") {
