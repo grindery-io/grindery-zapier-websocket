@@ -58,10 +58,7 @@ app.ws("/", function (ws, req) {
 
       //search id first in db, if not found - create new one
       var search_result_token = {};
-      if (
-        typeof dataJSON.params.fields.token !== undefined &&
-        dataJSON.id !== null
-      ) {
+      if (typeof dataJSON !== undefined && dataJSON.id !== null) {
         if (dataJSON.method === "callWebhook") {
           //Trigger a workflow from Zapier
           console.log(
