@@ -72,6 +72,20 @@ app.ws("/", function (ws, req) {
 
         if (dataJSON.method === "setupSignal") {
           console.log("Setup Signal from ", dataJSON.params.sessionId);
+          search_result_token = await webhook_collection.findOne({
+            token: dataJSON.params.fields.token,
+          });
+
+          const new_connection_token = {
+            $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
+          };
+
+          //associate connection with token
+          const insert_result = await collection.updateOne(
+            { token: dataJSON.token },
+            new_connection_token,
+            { upsert: true }
+          );
           //ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}');
         }
 
@@ -117,7 +131,7 @@ app.ws("/", function (ws, req) {
           }
         }
       }
-      //client.close(); //closed
+      client.close(); //closed
     });
   });
 
