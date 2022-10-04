@@ -136,19 +136,22 @@ app.ws("/", function (ws, req) {
   });
 
   ws.on("close", function (msg) {
-    client.connect(async (err) => {
-      //client.db("grindery_zapier").collection("webbooks");
-      const collection = client
-        .db("grindery_zapier")
-        .collection("connection_ids");
-      const delete_connection_id = await collection.deleteOne({
-        ws_id: ws.id,
+    try {
+      client.connect(async (err) => {
+        const collection = client
+          .db("grindery_zapier")
+          .collection("connection_ids");
+        const delete_connection_id = await collection.deleteOne({
+          ws_id: ws.id,
+        });
+        console.log(
+          `A document was deleted from connections collection with the ws_id: ${ws.id}`
+        );
+        client.close();
       });
-      console.log(
-        `A document was deleted from connections collection with the ws_id: ${ws.id}`
-      );
-      client.close();
-    });
+    } catch (error) {
+      console.log("Error closing: ", error);
+    }
   });
   //console.log("Hi Client: ", req);
 });
