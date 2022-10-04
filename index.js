@@ -90,6 +90,7 @@ app.ws("/", function (ws, req) {
 
         if (dataJSON.method === "runAction") {
           //Trigger a zap from Grindery
+          const payload = { id: dataJSON.params.sessionId };
           console.log("Run Action from ", dataJSON.params.sessionId);
           search_result_token = await webhook_collection.findOne({
             token: dataJSON.params.fields.token,
