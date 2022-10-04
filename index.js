@@ -113,7 +113,7 @@ app.ws("/", function (ws, req) {
           }
         }
       }
-      //client.close(); //closed
+      client.close(); //closed
     });
   });
 
