@@ -59,46 +59,55 @@ app.ws("/", function (ws, req) {
       //search id first in db, if not found - create new one
       var search_result_token = {};
       if (typeof dataJSON.params.fields.token !== undefined) {
-        search_result_token = await webhook_collection.findOne({
-          token: dataJSON.params.fields.token,
-        });
+        if (dataJSON.method === "callWebhook") {
+          //Trigger a workflow from Zapier
+          ws.send(JSON.stringify(dataJSON.params.fields.payload));
+        }
 
-        const new_connection_token = {
-          $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
-        };
+        if (dataJSON.method === "setupSignal") {
+        }
 
-        //associate connection with token
-        const insert_result = await collection.updateOne(
-          { token: dataJSON.token },
-          new_connection_token,
-          { upsert: true }
-        );
-      }
+        if (dataJSON.method === "runAction") {
+          //Trigger a zap from Grindery
+          search_result_token = await webhook_collection.findOne({
+            token: dataJSON.params.fields.token,
+          });
 
-      if (search_result_token) {
-        const forward_to_zap = await axios.post(
-          search_result_token.webhook_url,
-          {
-            payload,
+          const new_connection_token = {
+            $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
+          };
+
+          //associate connection with token
+          const insert_result = await collection.updateOne(
+            { token: dataJSON.token },
+            new_connection_token,
+            { upsert: true }
+          );
+
+          if (search_result_token) {
+            const forward_to_zap = await axios.post(
+              search_result_token.webhook_url,
+              {
+                payload,
+              }
+            );
+            //test if response is success
+            //demo test
+            const response_success = {
+              jsonrpc: "2.0",
+              error: null,
+              result: {},
+              id: 1,
+            };
+            //ws.send(JSON.stringify(response_success));
+            /*ws.send(
+              '{"jsonrpc": \'2.0\',"result":"success", "error": null,changes "id":1}'
+            ); //succeeds, not moving forward*/
+            ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}'); //succeeds, not moving forward
+            //ws.send('{"jsonrpc": "2.0", "error": null, "result": {},"id": 1}');
           }
-        );
-        //test if response is success
-        //demo test
-        const response_success = {
-          jsonrpc: "2.0",
-          error: null,
-          result: {},
-          id: 1,
-        };
-        //ws.send(JSON.stringify(response_success));
-        /*ws.send(
-          '{"jsonrpc": \'2.0\',"result":"success", "error": null,changes "id":1}'
-        ); //succeeds, not moving forward*/
-        ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}'); //succeeds, not moving forward
-        //ws.send('{"jsonrpc": "2.0", "error": null, "result": {},"id": 1}');
+        }
       }
-      //return;
-      //ws.send(msg);
       client.close(); //closed
     });
   });
