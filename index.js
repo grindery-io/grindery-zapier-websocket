@@ -135,6 +135,7 @@ app.ws("/", function (ws, req) {
   });
 
   ws.on("close", function (msg) {
+    console.log("Closing WS Client: ", ws.id);
     try {
       client.connect(async (err) => {
         const collection = client
