@@ -58,13 +58,19 @@ app.ws("/", function (ws, req) {
 
       //search id first in db, if not found - create new one
       var search_result_token = {};
-      if (typeof dataJSON.params.fields.token !== undefined) {
+      if (
+        typeof dataJSON.params.fields.token !== undefined &&
+        dataJSON.id !== null
+      ) {
         if (dataJSON.method === "callWebhook") {
           //Trigger a workflow from Zapier
-          console.log("Call Webhook on session: ", dataJSON.params.sessionId);
+          console.log(
+            "Call Webhook on session id: ",
+            dataJSON.params.sessionId
+          );
           console.log(JSON.stringify(dataJSON.params.fields.payload.payload));
-          //ws.send(JSON.stringify(dataJSON.params.fields.payload.payload));
-          ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}');
+          ws.send(JSON.stringify(dataJSON.params.fields.payload.payload));
+          //ws.send('{"jsonrpc": \'2.0\',"result":{}, "id":1}');
         }
 
         if (dataJSON.method === "setupSignal") {
