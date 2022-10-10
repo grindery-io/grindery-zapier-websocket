@@ -124,7 +124,7 @@ app.ws("/", function (ws, req) {
               result: {},
               id: 1,
             };
-
+            //ws.send(JSON.stringify(response_success));
             ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
           }
         }
