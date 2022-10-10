@@ -9,7 +9,7 @@ const port = 3000;
 const axios = require("axios");
 var expressWs = require("express-ws")(app);
 
-const uri = `mongodb+srv://${processenv.mongo_user}:${process.env.mongo_password}@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.mongo_user}:${process.env.mongo_password}@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
