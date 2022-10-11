@@ -122,10 +122,10 @@ app.ws("/", function (ws, req) {
             const response_success = {
               jsonrpc: "2.0",
               result: {},
-              id: 1,
+              id: dataJSON.id,
             };
-            //ws.send(JSON.stringify(response_success));
-            ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
+            ws.send(JSON.stringify(response_success));
+            //ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
           }
         }
       }
