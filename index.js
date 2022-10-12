@@ -129,9 +129,14 @@ app.ws("/", function (ws, req) {
           }
         }
         if (dataJSON.method === "ping") {
-          const resend = {
+          /*const resend = {
             jsonrpc: "2.0",
             method: "ping",
+            id: dataJSON.id,
+          };*/
+          const resend = {
+            jsonrpc: "2.0",
+            result: {},
             id: dataJSON.id,
           };
           ws.send(JSON.stringify(resend));
