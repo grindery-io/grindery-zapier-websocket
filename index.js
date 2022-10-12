@@ -134,7 +134,7 @@ app.ws("/", function (ws, req) {
             method: "ping",
             id: dataJSON.id,
           };
-          ws.send(JSON.stringify(response_success));
+          ws.send(JSON.stringify(resend));
         }
       }
       //client.close(); //closed
