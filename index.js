@@ -128,6 +128,9 @@ app.ws("/", function (ws, req) {
             //ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
           }
         }
+        if (dataJSON.method === "ping") {
+          ws.send(dataJSON);
+        }
       }
       //client.close(); //closed
     });
