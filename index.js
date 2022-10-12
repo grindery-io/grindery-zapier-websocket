@@ -87,7 +87,13 @@ app.ws("/", function (ws, req) {
             new_connection_token,
             { upsert: true }
           );
-          ws.send("");
+
+          const response_success = {
+            jsonrpc: "2.0",
+            result: {},
+            id: dataJSON.id,
+          };
+          ws.send(JSON.stringify(response_success));
         }
 
         if (dataJSON.method === "runAction") {
