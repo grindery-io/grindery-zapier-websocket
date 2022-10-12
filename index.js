@@ -129,7 +129,7 @@ app.ws("/", function (ws, req) {
           }
         }
         if (dataJSON.method === "ping") {
-          ws.send(dataJSON);
+          ws.send(msg);
         }
       }
       //client.close(); //closed
