@@ -128,9 +128,7 @@ app.ws("/", function (ws, req) {
             const response_success = {
               jsonrpc: "2.0",
               result: {},
-              params: {
-                sessionId: `${dataJSON.params.sessionId}`,
-              },
+              sessionId: `${dataJSON.params.sessionId}`,
               id: dataJSON.id,
             };
             ws.send(JSON.stringify(response_success));
