@@ -145,6 +145,7 @@ app.ws("/", function (ws, req) {
             jsonrpc: "2.0",
             result: {},
             id: dataJSON.id,
+            sessionId: dataJSON.params.sessionId,
           };
           ws.send(JSON.stringify(resend));
         }
