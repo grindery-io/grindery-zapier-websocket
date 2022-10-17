@@ -129,7 +129,7 @@ app.ws("/", function (ws, req) {
               jsonrpc: "2.0",
               result: {},
               params: {
-                sessionId: dataJSON.params.sessionId,
+                sessionId: `${dataJSON.params.sessionId}`,
               },
               id: dataJSON.id,
             };
