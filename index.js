@@ -131,11 +131,11 @@ app.ws("/", function (ws, req) {
               sessionId: dataJSON.params.sessionId,
               id: dataJSON.id,
             };
+            console.log(response_success);
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
                 result: search_result_token.webhook_url,
-                sessionId: dataJSON.params.sessionId,
                 id: dataJSON.id,
               })
             );
