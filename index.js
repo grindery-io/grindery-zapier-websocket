@@ -135,8 +135,7 @@ app.ws("/", function (ws, req) {
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
-                result: [search_result_token.webhook_url],
-                sessionId: dataJSON.params.sessionId,
+                result: 1,
                 id: dataJSON.id,
               })
             );
