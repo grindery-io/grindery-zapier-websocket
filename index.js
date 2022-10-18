@@ -128,7 +128,7 @@ app.ws("/", function (ws, req) {
             const response_success = {
               jsonrpc: "2.0",
               result: {},
-              sessionId: dataJSON.params.sessionId,
+              //sessionId: dataJSON.params.sessionId,
               id: dataJSON.id,
             };
             ws.send(JSON.stringify(response_success));
@@ -145,7 +145,7 @@ app.ws("/", function (ws, req) {
             jsonrpc: "2.0",
             result: {},
             id: dataJSON.id,
-            sessionId: dataJSON.params.sessionId,
+            //sessionId: dataJSON.params.sessionId,
           };
           ws.send(JSON.stringify(resend));
         }
