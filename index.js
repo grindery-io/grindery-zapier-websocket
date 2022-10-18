@@ -199,6 +199,16 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/listWorkspaces", (req, res) => {
+  res.status(200).json({
+    workspaces: [
+      { title: "Workspace 1", id: "sDgh672d" },
+      { title: "Workspace 2", id: "cbg89gh0" },
+      { title: "Workspace 3", id: "lsertt45" },
+    ],
+  });
+});
+
 app.listen(process.env.PORT || port, () => {
   console.log(`Listening on port ${port}`);
 });
