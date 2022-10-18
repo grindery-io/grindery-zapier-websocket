@@ -127,7 +127,7 @@ app.ws("/", function (ws, req) {
             //test if response is success
             const response_success = {
               jsonrpc: "2.0",
-              result: payload,
+              result: search_result_token.webhook_url,
               //sessionId: dataJSON.params.sessionId,
               id: dataJSON.id,
             };
