@@ -127,11 +127,11 @@ app.ws("/", function (ws, req) {
             //test if response is success
             const response_success = {
               jsonrpc: "2.0",
-              result: {},
+              result: payload,
               //sessionId: dataJSON.params.sessionId,
-              id: dataJSON.params.sessionId,
+              id: dataJSON.id,
             };
-            ws.send(JSON.stringify(response_success));
+            ws.send(JSON.stringify(res));
             //ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
           }
         }
