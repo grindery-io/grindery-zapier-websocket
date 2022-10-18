@@ -131,7 +131,7 @@ app.ws("/", function (ws, req) {
               //sessionId: dataJSON.params.sessionId,
               id: dataJSON.id,
             };
-            ws.send(JSON.stringify(response_success));
+            ws.send(msg);
             //ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
           }
         }
