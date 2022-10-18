@@ -132,14 +132,14 @@ app.ws("/", function (ws, req) {
               id: dataJSON.id,
             };
             console.log(response_success);
-            ws.send(
+            /*ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
                 result: 1,
                 id: dataJSON.id,
               })
-            );
-            //ws.send("{jsonrpc: '2.0', result: {}, id: 1}");
+            );*/
+            ws.send("{jsonrpc: '2.0', result: 'url.com', id: 1}");
           }
         }
         if (dataJSON.method === "ping") {
