@@ -54,6 +54,10 @@ app.ws("/", function (ws, req) {
         .db("grindery_zapier")
         .collection("webhooks");
 
+      const token_transmissions = client
+        .db("grindery_zapier")
+        .collection("messages");
+
       //search id first in db, if not found - create new one
       var search_result_token = {};
       if (typeof dataJSON !== undefined && dataJSON.id !== null) {
@@ -100,9 +104,20 @@ app.ws("/", function (ws, req) {
           //Trigger a zap from Grindery
           const payload = { id: dataJSON.params.sessionId };
           console.log("Run Action from ", dataJSON.params.sessionId);
+
           search_result_token = await webhook_collection.findOne({
             token: dataJSON.params.fields.token,
           });
+
+          //Insert token message, used by zapier perform list
+          const new_token_message = {
+            $set: { timestamp: Date.now() },
+          };
+
+          const insert_message_result = await token_transmissions.insertOne(
+            new_token_message
+          );
+          //end of message insert steps
 
           const new_connection_token = {
             $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
