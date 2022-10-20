@@ -163,6 +163,7 @@ app.ws("/", function (ws, req) {
                 result: {
                   key: dataJSON.params.key,
                   sessionId: dataJSON.params.sessionId,
+                  payload: {},
                 },
                 id: dataJSON.id,
               })
