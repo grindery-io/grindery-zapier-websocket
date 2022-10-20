@@ -243,13 +243,19 @@ app.post("/webhooks", async (req, res) => {
   client.connect(async (err) => {
     const collection = client.db("grindery_zapier").collection("webhooks");
     // perform actions on the collection object
-    console.log(req.body);
+    console.log(req.body); //DEBUG: Logging
+
     const hook_url = req.body.url;
-    //const hook_token = req.body.token;
+    const hook_token = req.body.token;
+    const workflow_id = req.body.workflow_id;
+    const workspace_key = req.body.workspace_id;
+
     const new_webhook = {
       timestamp: Date.now(),
-      //token: hook_token,
+      token: hook_token,
       webhook_url: hook_url,
+      workflow_id: workflow_id,
+      workspace_key: workspace_key,
     };
     const insert_result = await collection.insertOne(new_webhook);
     console.log(
@@ -257,9 +263,7 @@ app.post("/webhooks", async (req, res) => {
     );
     client.close();
     //res.status(200).send({ data: "ok" });
-    res
-      .status(200)
-      .json({ zap_token: hook_token, id: insert_result.insertedId });
+    res.status(200).json({ id: insert_result.insertedId });
   });
 });
 
