@@ -156,6 +156,17 @@ app.ws("/", function (ws, req) {
                 id: dataJSON.id,
               })
             );
+          } else {
+            ws.send(
+              JSON.stringify({
+                jsonrpc: "2.0",
+                result: {
+                  key: dataJSON.params.key,
+                  sessionId: dataJSON.params.sessionId,
+                },
+                id: dataJSON.id,
+              })
+            );
           }
         }
         if (dataJSON.method === "ping") {
