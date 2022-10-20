@@ -132,7 +132,7 @@ app.ws("/", function (ws, req) {
               id: dataJSON.id,
             };
             console.log(response_success);
-            ws.send(
+            /*ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
                 result: {
@@ -141,8 +141,21 @@ app.ws("/", function (ws, req) {
                 },
                 id: dataJSON.id,
               })
-            );
+            );*/
             //ws.send("{jsonrpc: '2.0', result: 'url.com', id: 1}");
+            ws.send(
+              JSON.stringify({
+                jsonrpc: "2.0",
+                result: {
+                  key: dataJSON.params.key,
+                  sessionId: dataJSON.params.sessionId,
+                  payload: {
+                    url: "http://url.com",
+                  },
+                },
+                id: dataJSON.id,
+              })
+            );
           }
         }
         if (dataJSON.method === "ping") {
@@ -220,10 +233,10 @@ app.post("/webhooks", async (req, res) => {
     // perform actions on the collection object
     console.log(req.body);
     const hook_url = req.body.url;
-    const hook_token = req.body.token;
+    //const hook_token = req.body.token;
     const new_webhook = {
       timestamp: Date.now(),
-      token: hook_token,
+      //token: hook_token,
       webhook_url: hook_url,
     };
     const insert_result = await collection.insertOne(new_webhook);
