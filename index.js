@@ -77,7 +77,7 @@ app.ws("/", function (ws, req) {
             JSON.stringify(dataJSON.params.fields.payload.payload)
           );
 
-          search_result_token = await token_transmissions.findOne({
+          search_result_token = await collection.findOne({
             token: dataJSON.params.fields.payload.data.token,
           });
 
@@ -101,11 +101,11 @@ app.ws("/", function (ws, req) {
           console.log("Setup Signal token ", dataJSON.params.fields.token);
 
           const new_signal_token = {
-            $set: { token: 12345, ws_id: ws.id },
+            $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
           };
 
           //associate connection with token
-          const insert_signal_result = await token_transmissions.insertOne(
+          const insert_signal_result = await collection.insertOne(
             new_signal_token
           );
 
