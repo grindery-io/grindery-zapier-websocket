@@ -105,10 +105,8 @@ app.ws("/", function (ws, req) {
           };
 
           //associate connection with token
-          const insert_signal_result = await token_transmissions.updateOne(
-            { token: dataJSON.params.fields.token },
-            new_signal_token,
-            { upsert: true }
+          const insert_signal_result = await token_transmissions.insertOne(
+            new_signal_token
           );
 
           //ws.send(JSON.stringify(response_success));
