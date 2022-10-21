@@ -97,11 +97,20 @@ app.ws("/", function (ws, req) {
 
         if (dataJSON.method === "setupSignal") {
           console.log("Setup Signal from ", dataJSON.params.sessionId);
+          console.log("Searching for data in DB");
           search_result_token = await data_transmissions.findOne({
             token: dataJSON.params.fields.token,
           });
 
           if (search_result_token) {
+            //copy data, then delete entry in mongodb
+            console.log("Found Data in DB");
+            const data_payload = search_result_token.data;
+
+            const delete_data = await data_transmissions.deleteOne({
+              token: dataJSON.params.fields.token,
+            });
+            console.log("Removed data from database");
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
