@@ -77,14 +77,22 @@ app.ws("/", function (ws, req) {
             JSON.stringify(dataJSON.params.fields.payload.payload)
           );
 
-          //send success message
-          ws.send(
+          search_result_token = await webhook_collection.findOne({
+            token: dataJSON.params.fields.payload.token,
+          });
+
+          if (search_result_token) {
+            ws.id = search_result_token.token;
             JSON.stringify({
               jsonrpc: "2.0",
-              result: {},
+              result: {
+                key: dataJSON.params.key,
+                sessionId: dataJSON.params.sessionId,
+                payload: dataJSON.params.fields.payload,
+              },
               id: dataJSON.id,
-            })
-          );
+            });
+          }
         }
 
         if (dataJSON.method === "setupSignal") {
