@@ -258,7 +258,9 @@ app.listen(process.env.PORT || port, () => {
   console.log(`Listening on port ${port}`);
 });
 
-app.get("/", async (req, res) => {});
+app.get("/", async (req, res) => {
+  console.log("Request Data: ", req.body);
+});
 
 app.post("/webhooks", async (req, res) => {
   console.log("client: ", client);
