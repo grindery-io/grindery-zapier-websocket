@@ -101,7 +101,7 @@ app.ws("/", function (ws, req) {
           console.log("Setup Signal token ", dataJSON.params.fields.token);
 
           const new_signal_token = {
-            $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
+            $set: { token: 12345, ws_id: ws.id },
           };
 
           //associate connection with token
