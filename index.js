@@ -97,9 +97,23 @@ app.ws("/", function (ws, req) {
 
         if (dataJSON.method === "setupSignal") {
           console.log("Setup Signal from ", dataJSON.params.sessionId);
-          search_result_token = await webhook_collection.findOne({
+          search_result_token = await data_transmissions.findOne({
             token: dataJSON.params.fields.token,
           });
+
+          if (search_result_token) {
+            ws.send(
+              JSON.stringify({
+                jsonrpc: "2.0",
+                result: {
+                  key: dataJSON.params.key,
+                  sessionId: dataJSON.params.sessionId,
+                  payload: search_result_token.data,
+                },
+                id: dataJSON.id,
+              })
+            );
+          }
 
           const new_connection_token = {
             $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
