@@ -92,7 +92,7 @@ app.ws("/", function (ws, req) {
                 jsonrpc: "2.0",
                 result: {
                   key: dataJSON.params.key,
-                  sessionId: dataJSON.params.sessionId,
+                  sessionId: search_result_token.sessionId,
                   payload: dataJSON.params.fields.payload.payload,
                 },
                 id: dataJSON.id,
@@ -106,7 +106,11 @@ app.ws("/", function (ws, req) {
           console.log("Setup Signal token ", dataJSON.params.fields.token);
 
           const new_signal_token = {
-            $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
+            $set: {
+              token: dataJSON.params.fields.token,
+              ws_id: ws.id,
+              sessionId: dataJSON.params.sessionId,
+            },
           };
 
           //associate connection with token
