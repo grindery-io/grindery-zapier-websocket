@@ -58,10 +58,15 @@ app.ws("/", function (ws, req) {
         .db("grindery_zapier")
         .collection("messages");
 
+      const data_transmissions = client
+        .db("grindery_zapier")
+        .collection("data");
+
       //search id first in db, if not found - create new one
       var search_result_token = {};
       if (typeof dataJSON !== undefined && dataJSON.id !== null) {
         if (dataJSON.method === "callWebhook") {
+          const webhook_payload = dataJSON.params.fields.payload.payload;
           //Trigger a workflow from Zapier
           console.log(
             "Call Webhook on session id: ",
@@ -71,8 +76,25 @@ app.ws("/", function (ws, req) {
             "Data Sent through webhook: ",
             JSON.stringify(dataJSON.params.fields.payload.payload)
           );
-          ws.send(JSON.stringify(dataJSON.params.fields.payload));
-          //ws.send('{"jsonrpc": "2.0","result":{}, "id":1}');
+
+          //associate connection with token
+          const insert_data_result = await data_transmissions.updateOne(
+            { token: webhook_payload.token },
+            webhook_payload,
+            { upsert: true }
+          );
+          //send success message
+          ws.send(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              result: {
+                key: dataJSON.params.key,
+                sessionId: dataJSON.params.sessionId,
+                payload: {},
+              },
+              id: dataJSON.id,
+            })
+          );
         }
 
         if (dataJSON.method === "setupSignal") {
@@ -140,24 +162,6 @@ app.ws("/", function (ws, req) {
             );
 
             //test if response is success
-            const response_success = {
-              jsonrpc: "2.0",
-              result: search_result_token.webhook_url,
-              sessionId: dataJSON.params.sessionId,
-              id: dataJSON.id,
-            };
-            console.log(response_success);
-            /*ws.send(
-              JSON.stringify({
-                jsonrpc: "2.0",
-                result: {
-                  sessionId: dataJSON.params.sessionId,
-                  url: "http://url.com",
-                },
-                id: dataJSON.id,
-              })
-            );*/
-            //ws.send("{jsonrpc: '2.0', result: 'url.com', id: 1}");
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
@@ -252,6 +256,8 @@ app.get("/listWorkspaces", (req, res) => {
 app.listen(process.env.PORT || port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+app.get("/", async (req, res) => {});
 
 app.post("/webhooks", async (req, res) => {
   console.log("client: ", client);
