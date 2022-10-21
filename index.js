@@ -105,8 +105,10 @@ app.ws("/", function (ws, req) {
           };
 
           //associate connection with token
-          const insert_signal_result = await collection.insertOne(
-            new_signal_token
+          const insert_signal_result = await collection.updateOne(
+            { token: dataJSON.params.fields.token },
+            { ws_id: ws.id },
+            { upsert: true }
           );
 
           //ws.send(JSON.stringify(response_success));
