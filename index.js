@@ -77,7 +77,7 @@ app.ws("/", function (ws, req) {
             JSON.stringify(dataJSON.params.fields.payload.payload)
           );
 
-          search_result_token = await webhook_collection.findOne({
+          search_result_token = await token_transmissions.findOne({
             token: dataJSON.params.fields.payload.token,
           });
 
