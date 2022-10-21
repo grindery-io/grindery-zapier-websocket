@@ -240,10 +240,6 @@ function uniqueID() {
   return s4() + s4() + "-" + s4();
 }
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.get("/listWorkspaces", (req, res) => {
   res.status(200).json({
     workspaces: [
@@ -260,6 +256,7 @@ app.listen(process.env.PORT || port, () => {
 
 app.get("/", async (req, res) => {
   console.log("Request Data: ", req.body);
+  res.send("Hello World!");
 });
 
 app.post("/webhooks", async (req, res) => {
