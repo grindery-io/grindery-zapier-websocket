@@ -78,7 +78,7 @@ app.ws("/", function (ws, req) {
           );
 
           search_result_token = await collection.findOne({
-            token: dataJSON.params.fields.payload.token,
+            token: dataJSON.params.fields.payload.payload.token,
           });
 
           if (search_result_token) {
