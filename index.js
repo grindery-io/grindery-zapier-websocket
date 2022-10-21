@@ -87,15 +87,17 @@ app.ws("/", function (ws, req) {
               JSON.stringify(search_result_token)
             );
             ws.id = search_result_token.ws_id;
-            JSON.stringify({
-              jsonrpc: "2.0",
-              result: {
-                key: dataJSON.params.key,
-                sessionId: dataJSON.params.sessionId,
-                payload: dataJSON.params.fields.payload,
-              },
-              id: dataJSON.id,
-            });
+            ws.send(
+              JSON.stringify({
+                jsonrpc: "2.0",
+                result: {
+                  key: dataJSON.params.key,
+                  sessionId: dataJSON.params.sessionId,
+                  payload: dataJSON.params.fields.payload,
+                },
+                id: dataJSON.id,
+              })
+            );
           }
         }
 
