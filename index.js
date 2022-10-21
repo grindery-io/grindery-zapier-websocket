@@ -77,10 +77,6 @@ app.ws("/", function (ws, req) {
             JSON.stringify(dataJSON.params.fields.payload.payload)
           );
 
-          //associate connection with token
-          const insert_data_result = await data_transmissions.insertOne(
-            webhook_payload
-          );
           //send success message
           ws.send(
             JSON.stringify({
@@ -92,51 +88,20 @@ app.ws("/", function (ws, req) {
         }
 
         if (dataJSON.method === "setupSignal") {
-          console.log("Setup Signal from ", dataJSON.params.sessionId);
-          console.log("Searching for data in DB");
-          search_result_token = await data_transmissions.findOne({
-            token: dataJSON.params.fields.token,
-          });
+          console.log("Setup Signal from ", ws_id);
 
-          if (search_result_token) {
-            //copy data, then delete entry in mongodb
-            console.log("Found Data in DB");
-            const data_payload = search_result_token.data;
-
-            /*const delete_data = await data_transmissions.deleteOne({
-              token: dataJSON.params.fields.token,
-            });*/
-            console.log("Removed data from database");
-            ws.send(
-              JSON.stringify({
-                jsonrpc: "2.0",
-                result: {
-                  key: dataJSON.params.key,
-                  sessionId: dataJSON.params.sessionId,
-                  payload: search_result_token.data,
-                },
-                id: dataJSON.id,
-              })
-            );
-          }
-
-          const new_connection_token = {
+          const new_signal_token = {
             $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
           };
 
           //associate connection with token
-          const insert_result = await collection.updateOne(
-            { token: dataJSON.token },
-            new_connection_token,
+          const insert_signal_result = await token_transmissions.updateOne(
+            { token: dataJSON.params.fields.token },
+            new_signal_token,
             { upsert: true }
           );
 
-          const response_success = {
-            jsonrpc: "2.0",
-            result: {},
-            id: dataJSON.id,
-          };
-          ws.send(JSON.stringify(response_success));
+          //ws.send(JSON.stringify(response_success));
         }
 
         if (dataJSON.method === "runAction") {
