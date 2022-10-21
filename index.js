@@ -85,11 +85,7 @@ app.ws("/", function (ws, req) {
           ws.send(
             JSON.stringify({
               jsonrpc: "2.0",
-              result: {
-                key: dataJSON.params.key,
-                sessionId: dataJSON.params.sessionId,
-                payload: dataJSON.params.fields.payload.payload,
-              },
+              result: {},
               id: dataJSON.id,
             })
           );
@@ -107,9 +103,9 @@ app.ws("/", function (ws, req) {
             console.log("Found Data in DB");
             const data_payload = search_result_token.data;
 
-            const delete_data = await data_transmissions.deleteOne({
+            /*const delete_data = await data_transmissions.deleteOne({
               token: dataJSON.params.fields.token,
-            });
+            });*/
             console.log("Removed data from database");
             ws.send(
               JSON.stringify({
