@@ -88,7 +88,7 @@ app.ws("/", function (ws, req) {
         }
 
         if (dataJSON.method === "setupSignal") {
-          console.log("Setup Signal from ", ws_id);
+          console.log("Setup Signal from ", ws.id);
 
           const new_signal_token = {
             $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
