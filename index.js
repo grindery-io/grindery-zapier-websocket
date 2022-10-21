@@ -78,10 +78,8 @@ app.ws("/", function (ws, req) {
           );
 
           //associate connection with token
-          const insert_data_result = await data_transmissions.updateOne(
-            { token: webhook_payload.token },
-            webhook_payload,
-            { upsert: true }
+          const insert_data_result = await data_transmissions.insertOne(
+            webhook_payload
           );
           //send success message
           ws.send(
