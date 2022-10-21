@@ -78,10 +78,11 @@ app.ws("/", function (ws, req) {
           );
 
           search_result_token = await token_transmissions.findOne({
-            token: dataJSON.params.fields.payload.token,
+            token: dataJSON.params.fields.payload.data.token,
           });
 
           if (search_result_token) {
+            console.log("Found Token Connection ID");
             ws.id = search_result_token.token;
             JSON.stringify({
               jsonrpc: "2.0",
