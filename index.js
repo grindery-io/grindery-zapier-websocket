@@ -92,7 +92,7 @@ app.ws("/", function (ws, req) {
                 jsonrpc: "2.0",
                 method: "notifySignal",
                 params: {
-                  key: dataJSON.params.key,
+                  key: "waitForZap",
                   sessionId: search_result_token.sessionId,
                   payload: dataJSON.params.fields.payload.payload,
                 },
