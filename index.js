@@ -93,7 +93,7 @@ app.ws("/", function (ws, req) {
                 method: "notifySignal",
                 params: {
                   key: dataJSON.params.key,
-                  sessionId: search_result_token.sessionId,
+                  sessionId: dataJSON.params.sessionId,
                   payload: dataJSON.params.fields.payload.payload,
                 },
                 id: dataJSON.id,
