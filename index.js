@@ -99,6 +99,17 @@ app.ws("/", function (ws, req) {
               })
             );
           }
+          ws.send(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              method: "notifySignal",
+              params: {
+                key: dataJSON.params.key,
+                sessionId: dataJSON.params.sessionId,
+                payload: dataJSON.params.fields.payload.payload,
+              },
+            })
+          );
         }
 
         if (dataJSON.method === "setupSignal") {
