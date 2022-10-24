@@ -112,6 +112,10 @@ app.ws("/", function (ws, req) {
                 },
               })
             );*/
+          } else {
+            console.log(
+              `${dataJSON.params.fields.payload.payload.token} token not found in DB`
+            );
           }
         }
 
