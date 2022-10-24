@@ -83,7 +83,7 @@ app.ws("/", function (ws, req) {
 
           if (search_result_token) {
             console.log(
-              "Found Token Connection ID: ",
+              "Found Token Connection Info: ",
               JSON.stringify(search_result_token)
             );
             ws.id = search_result_token.ws_id;
@@ -93,7 +93,7 @@ app.ws("/", function (ws, req) {
                 method: "notifySignal",
                 params: {
                   key: "waitForZap",
-                  sessionId: dataJSON.params.sessionId,
+                  sessionId: search_result_token.sessionId,
                   payload: {
                     data: webhook_payload,
                   },
