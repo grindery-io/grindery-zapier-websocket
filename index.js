@@ -86,7 +86,7 @@ app.ws("/", function (ws, req) {
               "Found Token Connection ID: ",
               JSON.stringify(search_result_token)
             );
-            ws.id = search_result_token.ws_id;
+            //ws.id = search_result_token.ws_id;
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
