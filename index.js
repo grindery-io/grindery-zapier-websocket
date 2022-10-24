@@ -248,7 +248,7 @@ app.ws("/", function (ws, req) {
     }
   });
   //console.log("Hi Client: ", req);
-  console.log("connection count", server.getConnections);
+  console.log("connection count", server.getConnections.length);
 });
 
 function uniqueID() {
