@@ -224,7 +224,7 @@ app.ws("/", function (ws, req) {
           ws.send(
             JSON.stringify({
               jsonrpc: "2.0",
-              method: "ping",
+              result: {},
               id: dataJSON.id,
             })
           );
