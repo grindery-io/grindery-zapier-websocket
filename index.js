@@ -96,7 +96,6 @@ app.ws("/", function (ws, req) {
                   sessionId: dataJSON.params.sessionId,
                   payload: dataJSON.params.fields.payload.payload,
                 },
-                id: dataJSON.id,
               })
             );
           }
