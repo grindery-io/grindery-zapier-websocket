@@ -86,8 +86,8 @@ app.ws("/", function (ws, req) {
               "Found Token Connection Info: ",
               JSON.stringify(search_result_token)
             );
-            ws.id = search_result_token.ws_id;
-            ws.send(
+            //ws.id = search_result_token.ws_id;
+            /*ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
                 method: "notifySignal",
@@ -98,8 +98,8 @@ app.ws("/", function (ws, req) {
                 },
                 id: dataJSON.id,
               })
-            );
-            /*ws.id = search_result_token.ws_id;
+            );*/
+            ws.id = search_result_token.ws_id;
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
@@ -112,7 +112,7 @@ app.ws("/", function (ws, req) {
                   },
                 },
               })
-            );*/
+            );
           } else {
             console.log(
               `${dataJSON.params.fields.payload.payload.token} token not found in DB`
