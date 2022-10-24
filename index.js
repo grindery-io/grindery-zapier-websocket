@@ -86,13 +86,14 @@ app.ws("/", function (ws, req) {
               "Found Token Connection Info: ",
               JSON.stringify(search_result_token)
             );
+            ws.id = search_result_token.ws_id;
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
                 method: "notifySignal",
                 result: {
                   key: dataJSON.params.key,
-                  sessionId: dataJSON.params.sessionId,
+                  sessionId: search_result_token.sessionId,
                   payload: dataJSON.params.fields.payload.payload,
                 },
                 id: dataJSON.id,
