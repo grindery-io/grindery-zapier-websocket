@@ -86,7 +86,18 @@ app.ws("/", function (ws, req) {
               "Found Token Connection Info: ",
               JSON.stringify(search_result_token)
             );
-            ws.id = search_result_token.ws_id;
+            ws.send(
+              JSON.stringify({
+                jsonrpc: "2.0",
+                result: {
+                  key: dataJSON.params.key,
+                  sessionId: dataJSON.params.sessionId,
+                  payload: {},
+                },
+                id: dataJSON.id,
+              })
+            );
+            /*ws.id = search_result_token.ws_id;
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
@@ -99,13 +110,13 @@ app.ws("/", function (ws, req) {
                   },
                 },
               })
-            );
+            );*/
           }
         }
 
         if (dataJSON.method === "setupSignal") {
           console.log("Setup Signal from ", ws.id);
-          console.log("Setup Signal token ", dataJSON.params.fields.sessionId);
+          console.log("Setup Signal token ", dataJSON.params.sessionId);
 
           const new_signal_token = {
             $set: {
