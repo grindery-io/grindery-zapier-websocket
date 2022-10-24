@@ -221,7 +221,14 @@ app.ws("/", function (ws, req) {
             id: dataJSON.id,
             //sessionId: dataJSON.params.sessionId,
           };
-          ws.send(JSON.stringify(resend));
+          ws.send(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              method: "ping",
+              id: dataJSON.id,
+            })
+          );
+          console.log("Respond Success to Ping");
         }
       }
       //client.close(); //closed
