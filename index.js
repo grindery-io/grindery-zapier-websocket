@@ -90,11 +90,7 @@ app.ws("/", function (ws, req) {
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
-                result: {
-                  key: dataJSON.params.key,
-                  sessionId: search_result_token.sessionId,
-                  payload: dataJSON.params.fields.payload.payload,
-                },
+                message: "Trigger",
                 id: dataJSON.id,
               })
             );
