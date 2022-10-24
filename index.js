@@ -94,7 +94,9 @@ app.ws("/", function (ws, req) {
                 params: {
                   key: "waitForZap",
                   sessionId: search_result_token.sessionId,
-                  payload: dataJSON.params.fields.payload.payload,
+                  payload: {
+                    data: webhook_payload,
+                  },
                 },
               })
             );
