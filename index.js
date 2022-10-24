@@ -90,7 +90,9 @@ app.ws("/", function (ws, req) {
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
-                message: "Trigger",
+                payload: {
+                  message: "Triggered",
+                },
                 id: dataJSON.id,
               })
             );
