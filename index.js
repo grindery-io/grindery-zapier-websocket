@@ -93,7 +93,7 @@ app.ws("/", function (ws, req) {
                 method: "notifySignal",
                 params: {
                   key: "waitForZap",
-                  sessionId: search_result_token.sessionId,
+                  sessionId: dataJSON.params.sessionId,
                   payload: {
                     data: webhook_payload,
                   },
@@ -105,7 +105,7 @@ app.ws("/", function (ws, req) {
 
         if (dataJSON.method === "setupSignal") {
           console.log("Setup Signal from ", ws.id);
-          console.log("Setup Signal token ", dataJSON.params.fields.token);
+          console.log("Setup Signal token ", dataJSON.params.fields.sessionId);
 
           const new_signal_token = {
             $set: {
