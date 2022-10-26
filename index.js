@@ -28,13 +28,6 @@ const client = new MongoClient(uri, {
 setInterval(() => {
   wss.clients.forEach((client) => {
     console.log("Sending to Client ID: ", client.id);
-    //client.send(new Date().toTimeString());
-    client.send(
-      JSON.stringify({
-        jsonrpc: "2.0",
-        result: {},
-      })
-    );
   });
 }, 30000);
 
@@ -89,6 +82,13 @@ wss.on("connection", (ws) => {
       }
       if (dataJSON.method === "Ping") {
         console.log("Ping Method from Client ", ws.id);
+        ws.send(
+          JSON.stringify({
+            jsonrpc: "2.0",
+            result: { message: "Success" },
+            id: dataJSON.id,
+          })
+        );
       }
     } //end of testing if dataJSON exists
   });
