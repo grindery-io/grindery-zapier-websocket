@@ -38,6 +38,24 @@ setInterval(() => {
   });
 }, 30000);
 
+function sendMessageToClient(id, sessionId, payload) {
+  wss.clients.forEach((client) => {
+    if (client.id === id) {
+      client.send(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          method: "notifySignal",
+          params: {
+            key: "waitForZap",
+            sessionId: search_result_token.sessionId,
+            payload: webhook_payload,
+          },
+        })
+      );
+    }
+  });
+}
+
 function uniqueID() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -117,7 +135,12 @@ wss.on("connection", (ws) => {
               "Found Token Connection Info: ",
               JSON.stringify(search_result_token)
             );
-            ws.id = search_result_token.ws_id;
+            sendMessageToClient(
+              search_result_token.ws_id,
+              search_result_token.sessionId,
+              webhook_payload
+            );
+            /*ws.id = search_result_token.ws_id;
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
@@ -128,7 +151,7 @@ wss.on("connection", (ws) => {
                   payload: webhook_payload,
                 },
               })
-            );
+            );*/
           } else {
             console.log(
               `${dataJSON.params.fields.payload.payload.token} token not found in DB`
