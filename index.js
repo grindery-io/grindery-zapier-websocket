@@ -28,7 +28,7 @@ const client = new MongoClient(uri, {
 setInterval(() => {
   wss.clients.forEach((client) => {
     console.log("Sending to Client ID: ", client.id);
-    ws.send(
+    client.send(
       JSON.stringify({
         jsonrpc: "2.0",
         result: {},
@@ -76,28 +76,46 @@ wss.on("connection", (ws) => {
     console.log("Message from Client ID: ", ws.id);
     const dataJSON = JSON.parse(msg); //data from connection
     console.log("Message from Grindery: ", dataJSON);
+    client.connect(async (err) => {
+      const collection = client
+        .db("grindery_zapier")
+        .collection("connection_ids");
 
-    if (typeof dataJSON !== undefined && dataJSON.id !== null) {
-      if (dataJSON.method === "callWebhook") {
-        console.log("CallWebhook Method from Client ", ws.id);
-      }
-      if (dataJSON.method === "setupSignal") {
-        console.log("setupSignal Method from Client ", ws.id);
-      }
-      if (dataJSON.method === "runAction") {
-        console.log("runAction Method from Client ", ws.id);
-      }
-      if (dataJSON.method === "Ping") {
-        console.log("Ping Method from Client ", ws.id);
-        ws.send(
-          JSON.stringify({
-            jsonrpc: "2.0",
-            result: {},
-            id: dataJSON.id,
-          })
-        );
-      }
-    } //end of testing if dataJSON exists
+      //finding webhook urls
+      const webhook_collection = client
+        .db("grindery_zapier")
+        .collection("webhooks");
+
+      const token_transmissions = client
+        .db("grindery_zapier")
+        .collection("messages");
+
+      const data_transmissions = client
+        .db("grindery_zapier")
+        .collection("data");
+
+      if (typeof dataJSON !== undefined && dataJSON.id !== null) {
+        if (dataJSON.method === "callWebhook") {
+          console.log("CallWebhook Method from Client ", ws.id);
+        }
+        if (dataJSON.method === "setupSignal") {
+          console.log("setupSignal Method from Client ", ws.id);
+        }
+        if (dataJSON.method === "runAction") {
+          console.log("runAction Method from Client ", ws.id);
+        }
+        if (dataJSON.method === "Ping") {
+          console.log("Ping Method from Client ", ws.id);
+          ws.send(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              result: {},
+              id: dataJSON.id,
+            })
+          );
+        }
+      } //end of testing if dataJSON exists
+    });
   });
 });
 
