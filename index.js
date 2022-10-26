@@ -97,6 +97,43 @@ wss.on("connection", (ws) => {
       if (typeof dataJSON !== undefined && dataJSON.id !== null) {
         if (dataJSON.method === "callWebhook") {
           console.log("CallWebhook Method from Client ", ws.id);
+          const webhook_payload = dataJSON.params.fields.payload.payload;
+          //Trigger a workflow from Zapier
+          console.log(
+            "Call Webhook on session id: ",
+            dataJSON.params.sessionId
+          );
+          console.log(
+            "Data Sent through webhook: ",
+            JSON.stringify(dataJSON.params.fields.payload.payload)
+          );
+
+          search_result_token = await collection.findOne({
+            token: dataJSON.params.fields.payload.payload.token,
+          });
+
+          if (search_result_token) {
+            console.log(
+              "Found Token Connection Info: ",
+              JSON.stringify(search_result_token)
+            );
+            ws.id = search_result_token.ws_id;
+            ws.send(
+              JSON.stringify({
+                jsonrpc: "2.0",
+                method: "notifySignal",
+                params: {
+                  key: "waitForZap",
+                  sessionId: search_result_token.sessionId,
+                  payload: webhook_payload,
+                },
+              })
+            );
+          } else {
+            console.log(
+              `${dataJSON.params.fields.payload.payload.token} token not found in DB`
+            );
+          }
         }
         if (dataJSON.method === "setupSignal") {
           console.log("setupSignal Method from Client ", ws.id);
