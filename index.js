@@ -1,13 +1,22 @@
 const express = require("express");
-const app = express();
-const server = require("http").createServer(app);
-const { WebSocket, Server } = require("ws");
+//const app = express();
+//const server = require("http").createServer(app);
+const { Server } = require("ws");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const { fromString } = require("uuidv4");
-const { v5 } = require("uuid");
+//const { fromString } = require("uuidv4");
+//const { v5 } = require("uuid");
 const port = 3000;
 const axios = require("axios");
-var expressWs = require("express-ws")(app);
+//var expressWs = require("express-ws")(app);
+
+const PORT = process.env.PORT || 3000;
+const INDEX = "/index.js";
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+const wss = new Server({ server });
 
 const uri = `mongodb+srv://${process.env.mongo_user}:${process.env.mongo_password}@cluster0.5d0qb9x.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -16,14 +25,70 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+setInterval(() => {
+  wss.clients.forEach((client) => {
+    console.log("Sending to Client ID: ", client.id);
+    client.send(new Date().toTimeString());
+  });
+}, 30000);
 
-app.ws("/", function (ws, req) {
+function uniqueID() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + "-" + s4();
+}
+
+wss.on("connection", (ws) => {
+  ws.id = uniqueID();
+  console.log("Client connected with ID: ", ws.id);
+
+  //on close, remove entry DB
+  ws.on("close", () => {
+    console.log(`Client ${ws.id} Disconnected`);
+    try {
+      client.connect(async (err) => {
+        const collection = client
+          .db("grindery_zapier")
+          .collection("connection_ids");
+        const delete_connection_id = await collection.deleteOne({
+          ws_id: ws.id,
+        });
+        console.log(
+          `A document was deleted from connections collection with the ws_id: ${ws.id}`
+        );
+        client.close();
+      });
+    } catch (error) {
+      console.log("Error closing: ", error);
+    }
+  });
+
+  ws.on("message", function (msg) {
+    console.log("Message from Client ID: ", ws.id);
+    const dataJSON = JSON.parse(msg); //data from connection
+    console.log("Message from Grindery: ", dataJSON);
+
+    if (typeof dataJSON !== undefined && dataJSON.id !== null) {
+      if (dataJSON.method === "callWebhook") {
+        console.log("CallWebhook Method from Client ", ws.id);
+      }
+      if (dataJSON.method === "setupSignal") {
+        console.log("setupSignal Method from Client ", ws.id);
+      }
+      if (dataJSON.method === "runAction") {
+        console.log("runAction Method from Client ", ws.id);
+      }
+      if (dataJSON.method === "Ping") {
+        console.log("Ping Method from Client ", ws.id);
+      }
+    } //end of testing if dataJSON exists
+  });
+});
+
+/*app.ws("/", function (ws, req) {
   ws.id = uniqueID();
   console.log("connected with id: ", ws.id);
   client.connect(async (err) => {
@@ -39,7 +104,6 @@ app.ws("/", function (ws, req) {
     if (!search_result) {
       const insert_result = await collection.insertOne(new_connection);
     }
-    //client.close();
   });
 
   ws.on("message", function (msg) {
@@ -199,7 +263,7 @@ app.ws("/", function (ws, req) {
             jsonrpc: "2.0",
             method: "ping",
             id: dataJSON.id,
-          };*/
+          };
           const resend = {
             jsonrpc: "2.0",
             result: {},
@@ -243,98 +307,4 @@ app.ws("/", function (ws, req) {
   console.log("connection count", server.getConnections.length);
 });
 
-function uniqueID() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + "-" + s4();
-}
-
-app.get("/listWorkspaces", (req, res) => {
-  res.status(200).json({
-    workspaces: [
-      { title: "Workspace 1", id: "sDgh672d" },
-      { title: "Workspace 2", id: "cbg89gh0" },
-      { title: "Workspace 3", id: "lsertt45" },
-    ],
-  });
-});
-
-app.listen(process.env.PORT || port, () => {
-  console.log(`Listening on port ${port}`);
-});
-
-app.get("/", async (req, res) => {
-  console.log("Request Data: ", req.body);
-  res.send("Hello World!");
-});
-
-app.post("/webhooks", async (req, res) => {
-  console.log("client: ", client);
-  client.connect(async (err) => {
-    const collection = client.db("grindery_zapier").collection("webhooks");
-    // perform actions on the collection object
-    console.log(req.body); //DEBUG: Logging
-
-    const hook_url = req.body.url;
-    const hook_token = req.body.token;
-    const workflow_id = req.body.workflow_id;
-    const workspace_key = req.body.workspace_id;
-
-    const new_webhook = {
-      timestamp: Date.now(),
-      token: hook_token,
-      webhook_url: hook_url,
-      workflow_id: workflow_id,
-      workspace_key: workspace_key,
-    };
-    const insert_result = await collection.insertOne(new_webhook);
-    console.log(
-      `A document was inserted with the _id: ${insert_result.insertedId}`
-    );
-    client.close();
-    //res.status(200).send({ data: "ok" });
-    res.status(200).json({ id: insert_result.insertedId });
-  });
-});
-
-app.delete("/webhooks/:webhook_id", async (req, res) => {
-  const { webhook_id } = req.params;
-
-  client.connect(async (err) => {
-    //client.db("grindery_zapier").collection("webbooks");
-    const collection = client.db("grindery_zapier").collection("webhooks");
-    const insert_result = await collection.deleteOne({
-      _id: new ObjectId(webhook_id),
-    });
-    console.log(`A document was deleted with the _id: ${webhook_id}`);
-    client.close();
-    res.status(200).json({ result: "removed" });
-  });
-});
-
-app.post("/triggerZap", async (req, res) => {
-  const token = req.body.token;
-  const payload = req.body.payload;
-  client.connect(async (err) => {
-    const collection = client.db("grindery_zapier").collection("webhooks");
-    // perform actions on the collection object
-    const search_result = await collection.findOne({ token: token });
-    //res.status(200).send({ data: "ok" });
-    if (search_result) {
-      const forward_to_zap = await axios.post(search_result.webhook_url, {
-        payload,
-      });
-
-      res.status(200).json({ message: forward_to_zap.status });
-    } else {
-      res.status(200).json({ err: "Zap not found" });
-    }
-    //res.status(200).json({ message: search_result.webhook_url });
-    client.close();
-  });
-});
-
-module.exports = app;
+module.exports = app;*/
