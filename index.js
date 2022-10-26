@@ -48,7 +48,7 @@ function sendMessageToClient(id, sessionId, payload) {
           params: {
             key: "waitForZap",
             sessionId: search_result_token.sessionId,
-            payload: webhook_payload,
+            payload: payload,
           },
         })
       );
