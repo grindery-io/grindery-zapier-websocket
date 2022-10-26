@@ -85,8 +85,7 @@ wss.on("connection", (ws) => {
         ws.send(
           JSON.stringify({
             jsonrpc: "2.0",
-            result: { message: "Success" },
-            id: dataJSON.id,
+            result: {},
           })
         );
       }
