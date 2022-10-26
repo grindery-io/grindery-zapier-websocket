@@ -86,6 +86,7 @@ wss.on("connection", (ws) => {
           JSON.stringify({
             jsonrpc: "2.0",
             result: {},
+            id: dataJSON.id,
           })
         );
       }
