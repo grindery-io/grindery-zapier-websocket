@@ -28,6 +28,13 @@ const client = new MongoClient(uri, {
 setInterval(() => {
   wss.clients.forEach((client) => {
     console.log("Sending to Client ID: ", client.id);
+    ws.send(
+      JSON.stringify({
+        jsonrpc: "2.0",
+        result: {},
+        id: dataJSON.id,
+      })
+    );
   });
 }, 30000);
 
