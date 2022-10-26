@@ -28,13 +28,13 @@ const client = new MongoClient(uri, {
 setInterval(() => {
   wss.clients.forEach((client) => {
     console.log("Sending to Client ID: ", client.id);
-    client.send(
+    /*client.send(
       JSON.stringify({
         jsonrpc: "2.0",
-        result: {},
+        result: { message: "Success" },
         id: dataJSON.id,
       })
-    );
+    );*/
   });
 }, 30000);
 
@@ -109,7 +109,7 @@ wss.on("connection", (ws) => {
           ws.send(
             JSON.stringify({
               jsonrpc: "2.0",
-              result: {},
+              result: { message: "Success" },
               id: dataJSON.id,
             })
           );
