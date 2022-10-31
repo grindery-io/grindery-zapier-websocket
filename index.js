@@ -1,13 +1,8 @@
 const express = require("express");
-//const app = express();
-//const server = require("http").createServer(app);
 const { Server } = require("ws");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-//const { fromString } = require("uuidv4");
-//const { v5 } = require("uuid");
 const port = 3000;
 const axios = require("axios");
-//var expressWs = require("express-ws")(app);
 
 const PORT = process.env.PORT || 3000;
 const INDEX = "/index.js";
