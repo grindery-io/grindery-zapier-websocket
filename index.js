@@ -186,7 +186,7 @@ wss.on("connection", (ws) => {
               $set: {
                 token: dataJSON.params.fields.token,
                 timestamp: Date.now(),
-                data: JSON.stringify(dataJSON.params.fields.data),
+                data: dataJSON.params.fields.data,
               },
             };
             const insert_test = await data_transmissions.updateOne(
