@@ -72,12 +72,12 @@ wss.on("connection", (ws) => {
         const collection = client
           .db("grindery_zapier")
           .collection("connection_ids");
-        const delete_connection_id = await collection.deleteOne({
+        /*const delete_connection_id = await collection.deleteOne({
           ws_id: ws.id,
         });
         console.log(
           `A document was deleted from connections collection with the ws_id: ${ws.id}`
-        );
+        );*/
         client.close();
       });
     } catch (error) {
@@ -156,14 +156,14 @@ wss.on("connection", (ws) => {
         }
         if (dataJSON.method === "setupSignal") {
           console.log("setupSignal Method from Client ", ws.id);
-          const new_signal_token = {
+          /*const new_signal_token = {
             $set: {
               [dataJSON.params.fields.token]: {
                 ws_id: ws.id,
                 sessionId: dataJSON.params.sessionId,
               },
             },
-          };
+          };*/
           /*const new_signal_token = {
             $set: {
               token: dataJSON.params.fields.token,
@@ -175,7 +175,12 @@ wss.on("connection", (ws) => {
           //associate connection with token
           const insert_signal_result = await collection.updateOne(
             { [dataJSON.params.fields.token]: dataJSON.params.fields.token },
-            new_signal_token,
+            {
+              $setOnInsert: {
+                ws_id: ws.id,
+                sessionId: dataJSON.params.sessionId,
+              },
+            },
             { upsert: true }
           );
         }
