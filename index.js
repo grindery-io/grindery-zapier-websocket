@@ -72,12 +72,12 @@ wss.on("connection", (ws) => {
         const collection = client
           .db("grindery_zapier")
           .collection("connection_ids");
-        const delete_connection_id = await collection.deleteOne({
+        /*const delete_connection_id = await collection.deleteOne({
           ws_id: ws.id,
         });
         console.log(
           `A document was deleted from connections collection with the ws_id: ${ws.id}`
-        );
+        );*/
         client.close();
       });
     } catch (error) {
@@ -122,7 +122,8 @@ wss.on("connection", (ws) => {
           );
 
           search_result_token = await collection.findOne({
-            token: dataJSON.params.fields.payload.payload.token,
+            [dataJSON.params.fields.payload.payload.token]:
+              dataJSON.params.fields.payload.payload.token,
           });
 
           if (search_result_token) {
