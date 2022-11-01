@@ -196,7 +196,13 @@ wss.on("connection", (ws) => {
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
-                result: {},
+                result: {
+                  key: dataJSON.params.key,
+                  sessionId: dataJSON.params.sessionId,
+                  payload: {
+                    url: "http://url.com",
+                  },
+                },
                 id: dataJSON.id,
               })
             );
@@ -247,7 +253,7 @@ wss.on("connection", (ws) => {
                     key: dataJSON.params.key,
                     sessionId: dataJSON.params.sessionId,
                     payload: {
-                      url: "http://url.com",
+                      url: search_result_token.webhook_url,
                     },
                   },
                   id: dataJSON.id,
