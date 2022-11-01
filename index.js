@@ -105,7 +105,7 @@ wss.on("connection", (ws) => {
 
       const data_transmissions = client
         .db("grindery_zapier")
-        .collection("data");
+        .collection("latest_data");
 
       if (typeof dataJSON !== undefined && dataJSON.id !== null) {
         if (dataJSON.method === "callWebhook") {
@@ -180,71 +180,92 @@ wss.on("connection", (ws) => {
           //Trigger a zap from Grindery
           const payload = { id: dataJSON.params.sessionId };
           console.log("Run Action from ", dataJSON.params.sessionId);
-
-          search_result_token = await webhook_collection.findOne({
-            token: dataJSON.params.fields.token,
-          });
-
-          //Insert token message, used by zapier perform list
-          const new_token_message = {
-            $set: { timestamp: Date.now() },
-          };
-
-          const insert_message_result = await token_transmissions.insertOne(
-            new_token_message
-          );
-          //end of message insert steps
-
-          const new_connection_token = {
-            $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
-          };
-
-          //associate connection with token
-          const insert_result = await collection.updateOne(
-            { token: dataJSON.token },
-            new_connection_token,
-            { upsert: true }
-          );
-
-          if (search_result_token) {
-            console.log("Found Zap URL", search_result_token.webhook_url);
-            const data = JSON.parse(
-              JSON.stringify(dataJSON.params.fields.data)
+          if (dataJSON.params.fields.dryRun) {
+            //testing from Grindery
+            const new_test = {
+              $set: {
+                token: dataJSON.params.fields.token,
+                timestamp: Date.now(),
+              },
+            };
+            const insert_test = await data_transmissions.updateOne(
+              { token: dataJSON.params.fields.token },
+              new_test,
+              { upsert: true }
             );
-            console.log("Data from Action: ", data);
-            const forward_to_zap = await axios.post(
-              search_result_token.webhook_url,
-              {
-                data: data,
-              }
-            );
-
-            //test if response is success
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
-                result: {
-                  key: dataJSON.params.key,
-                  sessionId: dataJSON.params.sessionId,
-                  payload: {
-                    url: "http://url.com",
-                  },
-                },
+                result: {},
                 id: dataJSON.id,
               })
             );
           } else {
-            ws.send(
-              JSON.stringify({
-                jsonrpc: "2.0",
-                result: {
-                  key: dataJSON.params.key,
-                  sessionId: dataJSON.params.sessionId,
-                  payload: {},
-                },
-                id: dataJSON.id,
-              })
+            search_result_token = await webhook_collection.findOne({
+              token: dataJSON.params.fields.token,
+            });
+
+            //Insert token message, used by zapier perform list
+            const new_token_message = {
+              $set: { timestamp: Date.now() },
+            };
+
+            const insert_message_result = await token_transmissions.insertOne(
+              new_token_message
             );
+            //end of message insert steps
+
+            const new_connection_token = {
+              $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
+            };
+
+            //associate connection with token
+            const insert_result = await collection.updateOne(
+              { token: dataJSON.token },
+              new_connection_token,
+              { upsert: true }
+            );
+
+            if (search_result_token) {
+              console.log("Found Zap URL", search_result_token.webhook_url);
+              const data = JSON.parse(
+                JSON.stringify(dataJSON.params.fields.data)
+              );
+              console.log("Data from Action: ", data);
+              const forward_to_zap = await axios.post(
+                search_result_token.webhook_url,
+                {
+                  data: data,
+                }
+              );
+
+              //test if response is success
+              ws.send(
+                JSON.stringify({
+                  jsonrpc: "2.0",
+                  result: {
+                    key: dataJSON.params.key,
+                    sessionId: dataJSON.params.sessionId,
+                    payload: {
+                      url: "http://url.com",
+                    },
+                  },
+                  id: dataJSON.id,
+                })
+              );
+            } else {
+              ws.send(
+                JSON.stringify({
+                  jsonrpc: "2.0",
+                  result: {
+                    key: dataJSON.params.key,
+                    sessionId: dataJSON.params.sessionId,
+                    payload: {},
+                  },
+                  id: dataJSON.id,
+                })
+              );
+            }
           }
         }
         if (dataJSON.method === "ping") {
