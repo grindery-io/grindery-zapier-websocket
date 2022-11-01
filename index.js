@@ -208,6 +208,7 @@ wss.on("connection", (ws) => {
 
           if (search_result_token) {
             console.log("Found Zap URL", search_result_token.webhook_url);
+            console.log("Data from Action: ", dataJSON.params.fields.data);
             const forward_to_zap = await axios.post(
               search_result_token.webhook_url,
               {
