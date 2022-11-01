@@ -176,7 +176,7 @@ wss.on("connection", (ws) => {
           const insert_signal_result = await collection.updateOne(
             { [dataJSON.params.fields.token]: dataJSON.params.fields.token },
             {
-              $setOnInsert: {
+              $set: {
                 ws_id: ws.id,
                 sessionId: dataJSON.params.sessionId,
               },
