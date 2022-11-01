@@ -122,8 +122,7 @@ wss.on("connection", (ws) => {
           );
 
           search_result_token = await collection.findOne({
-            [dataJSON.params.fields.payload.payload.token]:
-              dataJSON.params.fields.payload.payload.token,
+            token: dataJSON.params.fields.payload.payload.token,
           });
 
           if (search_result_token) {
