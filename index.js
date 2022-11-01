@@ -157,11 +157,19 @@ wss.on("connection", (ws) => {
           console.log("setupSignal Method from Client ", ws.id);
           const new_signal_token = {
             $set: {
+              [dataJSON.params.fields.token]: {
+                ws_id: ws.id,
+                sessionId: dataJSON.params.sessionId,
+              },
+            },
+          };
+          /*const new_signal_token = {
+            $set: {
               token: dataJSON.params.fields.token,
               ws_id: ws.id,
               sessionId: dataJSON.params.sessionId,
             },
-          };
+          };*/
 
           //associate connection with token
           const insert_signal_result = await collection.updateOne(
