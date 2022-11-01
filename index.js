@@ -135,18 +135,12 @@ wss.on("connection", (ws) => {
               search_result_token.sessionId,
               webhook_payload
             );
-            /*ws.id = search_result_token.ws_id;
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
-                method: "notifySignal",
-                params: {
-                  key: "waitForZap",
-                  sessionId: search_result_token.sessionId,
-                  payload: webhook_payload,
-                },
+                result: {},
               })
-            );*/
+            );
           } else {
             console.log(
               `${dataJSON.params.fields.payload.payload.token} token not found in DB`
