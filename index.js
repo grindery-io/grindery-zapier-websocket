@@ -173,7 +173,7 @@ wss.on("connection", (ws) => {
 
           //associate connection with token
           const insert_signal_result = await collection.updateOne(
-            { token: dataJSON.params.fields.token },
+            { [dataJSON.params.fields.token]: dataJSON.params.fields.token },
             new_signal_token,
             { upsert: true }
           );
