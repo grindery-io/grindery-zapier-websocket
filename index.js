@@ -159,9 +159,8 @@ wss.on("connection", (ws) => {
           const new_signal_token = {
             $set: {
               [dataJSON.params.fields.token]: dataJSON.params.fields.token,
-                ws_id: ws.id,
-                sessionId: dataJSON.params.sessionId,
-              },
+              ws_id: ws.id,
+              sessionId: dataJSON.params.sessionId,
             },
           };
           /*const new_signal_token = {
