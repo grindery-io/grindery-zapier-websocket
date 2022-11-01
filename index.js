@@ -136,7 +136,7 @@ wss.on("connection", (ws) => {
               search_result_token.sessionId,
               webhook_payload
             );
-            /*ws.id = search_result_token.ws_id;
+            ws.id = search_result_token.ws_id;
             ws.send(
               JSON.stringify({
                 jsonrpc: "2.0",
@@ -147,7 +147,7 @@ wss.on("connection", (ws) => {
                   payload: webhook_payload,
                 },
               })
-            );*/
+            );
           } else {
             console.log(
               `${dataJSON.params.fields.payload.payload.token} token not found in DB`
