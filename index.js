@@ -211,7 +211,7 @@ wss.on("connection", (ws) => {
             const forward_to_zap = await axios.post(
               search_result_token.webhook_url,
               {
-                payload,
+                data: dataJSON.params.fields.data,
               }
             );
 
