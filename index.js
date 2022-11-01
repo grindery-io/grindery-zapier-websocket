@@ -130,17 +130,20 @@ wss.on("connection", (ws) => {
               "Found Token Connection Info: ",
               JSON.stringify(search_result_token)
             );
+            //send to connection
+            ws.send(
+              JSON.stringify({
+                jsonrpc: "2.0",
+                result: {
+                  sessionId: dataJSON.params.sessionId,
+                },
+                id: dataJSON.id,
+              })
+            );
             sendMessageToClient(
               search_result_token.ws_id,
               search_result_token.sessionId,
               webhook_payload
-            );
-            ws.send(
-              JSON.stringify({
-                jsonrpc: "2.0",
-                result: {},
-                id: ws.id,
-              })
             );
           } else {
             console.log(
