@@ -112,7 +112,7 @@ wss.on("connection", (ws) => {
           console.log("CallWebhook Method from Client ", ws.id);
           const webhook_payload = dataJSON.params.fields.payload.payload;
           //Trigger a workflow from Zapier
-          console.log("Data Payload ", JSON.stringify(dataJSON));
+          console.log("Data Payload: ", JSON.stringify(dataJSON));
           console.log(
             "Call Webhook on session id: ",
             dataJSON.params.sessionId
