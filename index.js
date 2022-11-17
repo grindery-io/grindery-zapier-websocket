@@ -238,6 +238,7 @@ wss.on("connection", (ws) => {
               const data = JSON.parse(
                 JSON.stringify(dataJSON.params.fields.data)
               );
+
               console.log("Data from Action: ", data);
               const forward_to_zap = await axios.post(
                 search_result_token.webhook_url,
