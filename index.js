@@ -122,7 +122,7 @@ wss.on("connection", (ws) => {
           );
 
           search_result_token = await collection.findOne({
-            token: dataJSON.params.fields.payload.payload.token,
+            token: dataJSON.params.fields.payload.token,
           });
 
           if (search_result_token) {
@@ -147,7 +147,7 @@ wss.on("connection", (ws) => {
             );
           } else {
             console.log(
-              `${dataJSON.params.fields.payload.payload.token} token not found in DB`
+              `${dataJSON.params.fields.payload.token} token not found in DB`
             );
           }
         }
