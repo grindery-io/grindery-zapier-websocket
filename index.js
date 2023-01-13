@@ -215,6 +215,8 @@ wss.on("connection", (ws) => {
             search_result_token = await webhook_collection.findOne({
               token: token_received,
             });
+            console.log("Search complete for token: ", token_received);
+            console.log("Result: ", search_result_token);
 
             //Insert token message, used by zapier perform list
             const new_token_message = {
