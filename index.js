@@ -178,6 +178,7 @@ wss.on("connection", (ws) => {
         }
         if (dataJSON.method === "runAction") {
           console.log("runAction Method from Client ", ws.id);
+          console.log(`Client ID ${ws.id} has payload ${dataJSON.params}`);
           //Trigger a zap from Grindery
           const payload = { id: dataJSON.params.sessionId };
           const token_received = dataJSON.params.fields.token;
