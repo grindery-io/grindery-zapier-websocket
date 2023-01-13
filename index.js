@@ -180,6 +180,8 @@ wss.on("connection", (ws) => {
           console.log("runAction Method from Client ", ws.id);
           //Trigger a zap from Grindery
           const payload = { id: dataJSON.params.sessionId };
+          const token_received = dataJSON.params.fields.token;
+
           console.log("Run Action from ", dataJSON.params.sessionId);
           if (dataJSON.params.fields.dryRun) {
             //testing from Grindery
@@ -209,8 +211,9 @@ wss.on("connection", (ws) => {
               })
             );
           } else {
+            console.log("Searching DB for token: ", token_received);
             search_result_token = await webhook_collection.findOne({
-              token: dataJSON.params.fields.token,
+              token: token_received,
             });
 
             //Insert token message, used by zapier perform list
