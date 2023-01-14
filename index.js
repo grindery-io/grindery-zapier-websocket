@@ -213,11 +213,11 @@ wss.on("connection", (ws) => {
             );
           } else {
             console.log("Searching DB for token: ", token_received);
-            search_result_token = await webhook_collection.findOne({
+            const webhook_search = await webhook_collection.findOne({
               token: token_received,
             });
             console.log("Search complete for token: ", token_received);
-            console.log("Result: ", search_result_token);
+            console.log("Result: ", webhook_search);
 
             //Insert token message, used by zapier perform list
             const new_token_message = {
@@ -240,15 +240,15 @@ wss.on("connection", (ws) => {
               { upsert: true }
             );
 
-            if (search_result_token) {
-              console.log("Found Zap URL", search_result_token.webhook_url);
+            if (webhook_search) {
+              console.log("Found Zap URL", webhook_search.webhook_url);
               const data = JSON.parse(
                 JSON.stringify(dataJSON.params.fields.data)
               );
 
               console.log("Data from Action: ", data);
               const forward_to_zap = await axios.post(
-                search_result_token.webhook_url,
+                webhook_search.webhook_url,
                 data
               );
 
@@ -260,7 +260,7 @@ wss.on("connection", (ws) => {
                     key: dataJSON.params.key,
                     sessionId: dataJSON.params.sessionId,
                     payload: {
-                      url: search_result_token.webhook_url,
+                      url: webhook_search.webhook_url,
                     },
                   },
                   id: dataJSON.id,
