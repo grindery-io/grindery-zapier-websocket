@@ -240,7 +240,7 @@ wss.on("connection", (ws) => {
               { upsert: true }
             );
 
-            if (webhook_search) {
+            if (webhook_search !== null) {
               console.log("Found Zap URL", webhook_search.webhook_url);
               const data = JSON.parse(
                 JSON.stringify(dataJSON.params.fields.data)
