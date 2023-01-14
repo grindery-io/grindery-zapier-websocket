@@ -213,7 +213,7 @@ wss.on("connection", (ws) => {
             );
           } else {
             console.log("Searching DB for token: ", token_received);
-            const webhook_search = await webhook_collection.findOne({
+            search_result_token = await webhook_collection.findOne({
               token: token_received,
             });
             console.log("Search complete for token: ", token_received);
@@ -240,15 +240,15 @@ wss.on("connection", (ws) => {
               { upsert: true }
             );
 
-            if (webhook_search !== null) {
-              console.log("Found Zap URL", webhook_search.webhook_url);
+            if (search_result_token !== null) {
+              console.log("Found Zap URL", search_result_token.webhook_url);
               const data = JSON.parse(
                 JSON.stringify(dataJSON.params.fields.data)
               );
 
               console.log("Data from Action: ", data);
               const forward_to_zap = await axios.post(
-                webhook_search.webhook_url,
+                search_result_token.webhook_url,
                 data
               );
 
@@ -260,7 +260,7 @@ wss.on("connection", (ws) => {
                     key: dataJSON.params.key,
                     sessionId: dataJSON.params.sessionId,
                     payload: {
-                      url: webhook_search.webhook_url,
+                      url: search_result_token.webhook_url,
                     },
                   },
                   id: dataJSON.id,
