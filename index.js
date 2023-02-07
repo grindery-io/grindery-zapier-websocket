@@ -23,13 +23,6 @@ const client = new MongoClient(uri, {
 setInterval(() => {
   wss.clients.forEach((client) => {
     console.log("Sending to Client ID: ", client.id);
-    /*client.send(
-      JSON.stringify({
-        jsonrpc: "2.0",
-        result: { message: "Success" },
-        id: dataJSON.id,
-      })
-    );*/
   });
 }, 30000);
 
@@ -72,12 +65,6 @@ wss.on("connection", (ws) => {
         const collection = client
           .db("grindery_zapier")
           .collection("connection_ids");
-        /*const delete_connection_id = await collection.deleteOne({
-          ws_id: ws.id,
-        });
-        console.log(
-          `A document was deleted from connections collection with the ws_id: ${ws.id}`
-        );*/
         client.close();
       });
     } catch (error) {
@@ -98,10 +85,6 @@ wss.on("connection", (ws) => {
       const webhook_collection = client
         .db("grindery_zapier")
         .collection("webhooks");
-
-      const token_transmissions = client
-        .db("grindery_zapier")
-        .collection("messages");
 
       const data_transmissions = client
         .db("grindery_zapier")
@@ -161,13 +144,6 @@ wss.on("connection", (ws) => {
               sessionId: dataJSON.params.sessionId,
             },
           };
-          /*const new_signal_token = {
-            $set: {
-              token: dataJSON.params.fields.token,
-              ws_id: ws.id,
-              sessionId: dataJSON.params.sessionId,
-            },
-          };*/
 
           //associate connection with token
           const insert_signal_result = await collection.updateOne(
@@ -222,28 +198,6 @@ wss.on("connection", (ws) => {
             });
             console.log("Search complete for token: ", token_received);
             console.log("Result: ", search);
-
-            //Insert token message, used by zapier perform list
-            //NO LONGER IN USE - REMOVE
-            /*const new_token_message = {
-              $set: { timestamp: Date.now() },
-            };
-
-            const insert_message_result = await token_transmissions.insertOne(
-              new_token_message
-            );*/
-            //end of message insert steps
-
-            /*const new_connection_token = {
-              $set: { token: dataJSON.params.fields.token, ws_id: ws.id },
-            };
-
-            //associate connection with token
-            const insert_result = await collection.updateOne(
-              { token: dataJSON.token },
-              new_connection_token,
-              { upsert: true }
-            );*/
 
             if (search !== null) {
               console.log("Found Zap URL", search.webhook_url);
