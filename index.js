@@ -62,9 +62,7 @@ wss.on("connection", (ws) => {
     console.log(`Client ${ws.id} Disconnected`);
     try {
       client.connect(async (err) => {
-        const collection = client
-          .db("grindery_zapier")
-          .collection("connection_ids");
+        const collection = client.db("zapier").collection("connection_ids");
         client.close();
       });
     } catch (error) {
@@ -77,18 +75,12 @@ wss.on("connection", (ws) => {
     const dataJSON = JSON.parse(msg); //data from connection
     console.log("Message from Grindery: ", dataJSON);
     client.connect(async (err) => {
-      const collection = client
-        .db("grindery_zapier")
-        .collection("connection_ids");
+      const collection = client.db("zapier").collection("connection_ids");
 
       //finding webhook urls
-      const webhook_collection = client
-        .db("grindery_zapier")
-        .collection("webhooks");
+      const webhook_collection = client.db("zapier").collection("webhooks");
 
-      const data_transmissions = client
-        .db("grindery_zapier")
-        .collection("latest_data");
+      const data_transmissions = client.db("zapier").collection("latest_data");
 
       if (typeof dataJSON !== undefined && dataJSON.id !== null) {
         if (dataJSON.method === "callWebhook") {
